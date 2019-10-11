@@ -6,17 +6,17 @@ import 'app_config.dart';
 import 'dashboard.dart';
 
 /// The main gallery app widget.
-class GalleryApp extends StatefulWidget {
-  GalleryApp({Key key}) : super(key: key);
+class MainApp extends StatefulWidget {
+  MainApp({Key key}) : super(key: key);
 
   @override
-  GalleryAppState createState() => new GalleryAppState();
+  MainAppState createState() => new MainAppState();
 }
 
 /// The main gallery app state.
 ///
 /// Controls performance overlay, and instantiates a [Home] widget.
-class GalleryAppState extends State<GalleryApp> {
+class MainAppState extends State<MainApp> {
   // Initialize app settings from the default configuration.
   bool _showPerformanceOverlay = defaultConfig.showPerformanceOverlay;
 
@@ -35,12 +35,12 @@ void main() async {
   ByteData loadedData;
 
   await Future.wait<void>(<Future<void>>[
-    rootBundle.load('assets/timezone/2018c.tzf').then((ByteData data) {
+    rootBundle.load('assets/2019b.tzf').then((ByteData data) {
       loadedData = data;
       print('loaded data');
     })
   ]);
   initializeDatabase(loadedData.buffer.asUint8List());
 
-  runApp(new GalleryApp());
+  runApp(new MainApp());
 }
