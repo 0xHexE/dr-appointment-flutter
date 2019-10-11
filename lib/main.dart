@@ -40,6 +40,7 @@ void main() async {
       print('loaded data');
     })
   ]);
+
   initializeDatabase(loadedData.buffer.asUint8List());
 
   runApp(new MainApp());

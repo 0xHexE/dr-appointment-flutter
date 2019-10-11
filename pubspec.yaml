@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   charts_flutter: ^0.8.1
   timezone: ^0.5.5
+  flutter_native_timezone: ^1.0.4
 
 dev_dependencies:
   flutter_test:

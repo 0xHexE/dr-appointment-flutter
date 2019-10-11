@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:appointment_app/components/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/standalone.dart';
 
 import 'components/calendar/calendar.dart';
@@ -13,6 +14,10 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
+  List<CalendarEvent> events = <CalendarEvent>[];
+  Location loc;
+  Random random = new Random();
+
   Widget buildItem(BuildContext context, CalendarEvent e) {
     return new Card(
       child: new ListTile(
@@ -53,10 +58,43 @@ class _CalendarState extends State<Calendar> {
           children: <Widget>[Text('Omkar')],
         ),
       ),
-      body: CalendarWidget(
-        getEvents: getEvents,
-        buildItem: buildItem,
-        initialDate: TZDateTime.now(getLocation('America/Detroit')),
+      body: new Column(
+        children: <Widget>[
+          new FutureBuilder<String>(
+            future: FlutterNativeTimezone.getLocalTimezone(),
+            builder: (BuildContext context, AsyncSnapshot<String> tz) {
+              if (tz.hasError) {
+                print(tz.error);
+                return Text(tz.error);
+              }
+              if (tz.hasData) {
+                loc = getLocation(tz.data);
+                TZDateTime nowTime = new TZDateTime.now(loc);
+                return new Expanded(
+                  child: new CalendarWidget(
+                    initialDate: nowTime,
+                    beginningRangeDate:
+                        nowTime.subtract(new Duration(days: 31)),
+                    endingRangeDate: nowTime.add(new Duration(days: 31)),
+                    location: loc,
+                    buildItem: buildItem,
+                    getEvents: getEvents,
+                    bannerHeader:
+                        new AssetImage("assets/images/calendarheader.png"),
+                    monthHeader:
+                        new AssetImage("assets/images/calendarbanner.jpg"),
+                    weekBeginsWithDay:
+                        1, // Sunday = 0, Monday = 1, Tuesday = 2, ..., Saturday = 6
+                  ),
+                );
+              } else {
+                return new Center(
+                  child: new Text("Getting the timezone..."),
+                );
+              }
+            },
+          ),
+        ],
       ),
       drawer: DrawerInternal(),
       floatingActionButton: FloatingActionButton.extended(
