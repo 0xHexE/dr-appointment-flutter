@@ -1,3 +1,4 @@
+import 'package:appointment_app/client_list.dart';
 import 'package:flutter/material.dart';
 
 class DrawerInternal extends StatelessWidget {
@@ -31,7 +32,10 @@ class DrawerInternal extends StatelessWidget {
           ListTile(
             title: Text('Patients'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ClientList()),
+              );
             },
             leading: Icon(Icons.group),
           ),

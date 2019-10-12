@@ -26,6 +26,7 @@ dependencies:
   charts_flutter: ^0.8.1
   timezone: ^0.5.5
   flutter_native_timezone: ^1.0.4
+  datetime_picker_formfield: ^0.4.3
 
 dev_dependencies:
   flutter_test:
