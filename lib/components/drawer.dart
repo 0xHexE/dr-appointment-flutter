@@ -1,5 +1,8 @@
-import 'package:appointment_app/client_list.dart';
+// import 'package:appointment_app/client_list.dart';
+import 'package:flutter_app/client_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/my_account.dart';
+import 'package:flutter_app/notification.dart';
 
 class DrawerInternal extends StatelessWidget {
   @override
@@ -25,7 +28,10 @@ class DrawerInternal extends StatelessWidget {
           ListTile(
             title: Text('Notifications'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationPage())
+              );
             },
             leading: Icon(Icons.notifications),
           ),
@@ -42,7 +48,10 @@ class DrawerInternal extends StatelessWidget {
           ListTile(
             title: Text('My account'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context)=> MyAccount()),
+              );
             },
             leading: Icon(Icons.person),
           ),

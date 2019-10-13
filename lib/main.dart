@@ -1,47 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:timezone/timezone.dart';
+import 'package:flutter_app/dashboard.dart';
+import 'package:flutter_app/new_appointment.dart';
+import './notification.dart';
+import 'package:flutter_app/calender.dart';
 
-import 'app_config.dart';
-import 'dashboard.dart';
-
-/// The main gallery app widget.
-class MainApp extends StatefulWidget {
-  MainApp({Key key}) : super(key: key);
-
-  @override
-  MainAppState createState() => new MainAppState();
+// void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
 }
 
-/// The main gallery app state.
-///
-/// Controls performance overlay, and instantiates a [Home] widget.
-class MainAppState extends State<MainApp> {
-  // Initialize app settings from the default configuration.
-  bool _showPerformanceOverlay = defaultConfig.showPerformanceOverlay;
-
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: defaultConfig.appName,
-      theme: defaultConfig.theme,
-      showPerformanceOverlay: _showPerformanceOverlay,
-      home: new Dashboard(),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Dashboard(),
+      routes: <String, WidgetBuilder>{
+        'showHomePage': (BuildContext context) => MyHomePage(title: 'test'),
+      },
     );
   }
 }
 
-void main() async {
-  ByteData loadedData;
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key key, this.title}) : super(key: key);
+  final String title;
 
-  await Future.wait<void>(<Future<void>>[
-    rootBundle.load('assets/2019b.tzf').then((ByteData data) {
-      loadedData = data;
-      print('loaded data');
-    })
-  ]);
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
 
-  initializeDatabase(loadedData.buffer.asUint8List());
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
 
-  runApp(new MainApp());
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void onTestTap() {
+    Navigator.pushNamed(context, 'showNamePage');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+                accountName: Text('hello'),
+                accountEmail: Text('hello@hello.hello'),
+                currentAccountPicture: CircleAvatar(
+                  child: Icon(Icons.zoom_out_map),
+                )
+            ),
+            ListTile(
+              title: Text('test'),
+              onTap: onTestTap,
+            ),
+            ListTile (
+              title: Text('*'),
+              onTap: null,
+            ),
+          ],
+        ),
+      ),
+    body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.display1,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
 }
