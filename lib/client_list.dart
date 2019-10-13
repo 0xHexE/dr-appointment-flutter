@@ -1,8 +1,8 @@
 // import 'package:appointment_app/new_client.dart';
-import 'package:flutter_app/new_client.dart';
+import 'package:appointment_app/new_client.dart';
+import 'package:appointment_app/services/client_list_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/client_list_service.dart';
 
 class ClientList extends StatefulWidget {
   @override
@@ -17,18 +17,17 @@ class _ClientListState extends State<ClientList> {
       body: Column(
         children: <Widget>[
           FutureBuilder(
-            future: getClients(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return Text('error');
+              future: getClients(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Text('error');
+                  }
+                  return Text(snapshot.data.toString());
+                } else {
+                  return CircularProgressIndicator();
                 }
-                return Text(snapshot.data.toString());
-              }else {
-                return CircularProgressIndicator();
-              }
-            }
-          )
+              })
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(

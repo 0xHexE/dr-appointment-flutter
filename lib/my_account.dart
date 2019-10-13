@@ -1,7 +1,7 @@
+import 'package:appointment_app/model/my_account_model.dart';
+import 'package:appointment_app/services/my_account_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/my_account_model.dart';
-import 'package:flutter_app/services/my_account_service.dart';
 
 class MyAccount extends StatefulWidget {
   @override
@@ -13,15 +13,14 @@ class _MyAccountState extends State<MyAccount> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Acoount'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        )
-      ),
-      body: FutureBuilder<MyAccountModel> (
+          title: Text('My Acoount'),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )),
+      body: FutureBuilder<MyAccountModel>(
         future: getAccountInfo(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
@@ -29,7 +28,7 @@ class _MyAccountState extends State<MyAccount> {
               return Text('error');
             }
             return Text(snapshot.data.toString());
-          }else {
+          } else {
             return CircularProgressIndicator();
           }
         },

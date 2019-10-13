@@ -1,10 +1,9 @@
 import 'dart:math';
 
-// import 'package:appointment_app/components/drawer.dart';
-import 'package:flutter_app/components/drawer.dart';
+import 'package:appointment_app/components/drawer.dart';
+import 'package:appointment_app/services/calender_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/calender_service.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/standalone.dart';
 
@@ -37,10 +36,10 @@ class _CalendarState extends State<Calendar> {
 
     if (loc != null && events.length == 0) {
       TZDateTime nowTime =
-      new TZDateTime.now(loc).subtract(new Duration(days: 5));
+          new TZDateTime.now(loc).subtract(new Duration(days: 5));
       for (int i = 0; i < 20; i++) {
         TZDateTime start =
-        nowTime.add(new Duration(days: i + random.nextInt(10)));
+            nowTime.add(new Duration(days: i + random.nextInt(10)));
         events.add(new CalendarEvent(
             index: i,
             instant: start,
@@ -76,17 +75,17 @@ class _CalendarState extends State<Calendar> {
                   child: new CalendarWidget(
                     initialDate: nowTime,
                     beginningRangeDate:
-                    nowTime.subtract(new Duration(days: 31)),
+                        nowTime.subtract(new Duration(days: 31)),
                     endingRangeDate: nowTime.add(new Duration(days: 31)),
                     location: loc,
                     buildItem: buildItem,
                     getEvents: getEvents,
                     bannerHeader:
-                    new AssetImage("assets/images/calendarheader.png"),
+                        new AssetImage("assets/images/calendarheader.png"),
                     monthHeader:
-                    new AssetImage("assets/images/calendarbanner.jpg"),
+                        new AssetImage("assets/images/calendarbanner.jpg"),
                     weekBeginsWithDay:
-                    1, // Sunday = 0, Monday = 1, Tuesday = 2, ..., Saturday = 6
+                        1, // Sunday = 0, Monday = 1, Tuesday = 2, ..., Saturday = 6
                   ),
                 );
               } else {
@@ -104,7 +103,7 @@ class _CalendarState extends State<Calendar> {
                   return Text('error');
                 }
                 return Text(snapshot.data.toString());
-              }else {
+              } else {
                 return CircularProgressIndicator();
               }
             },

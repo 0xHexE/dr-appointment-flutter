@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 CalenderModel calenderModelFromJson(String str) {
@@ -11,11 +10,7 @@ class CalenderModel {
   List<String> appointment;
   List<String> description;
 
-  CalenderModel({
-    this.date,
-    this.appointment,
-    this.description
-  });
+  CalenderModel({this.date, this.appointment, this.description});
 
   factory CalenderModel.fromJson(Map<String, dynamic> parsedJson) {
     var datefromJson = parsedJson['date']; //.toDate or something
@@ -23,9 +18,8 @@ class CalenderModel {
     var descriptionFromJson = parsedJson['description'];
 
     return new CalenderModel(
-      date: datefromJson,
-      appointment: appointmentsFromJson,
-      description: descriptionFromJson
-    );
+        date: datefromJson,
+        appointment: appointmentsFromJson,
+        description: descriptionFromJson);
   }
 }

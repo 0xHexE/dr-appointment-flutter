@@ -1,4 +1,4 @@
-import 'package:flutter_app/model/client_list_model.dart';
+import 'package:appointment_app/model/client_list_model.dart';
 import 'package:http/http.dart' as http;
 
 String url = 'http://localhost:4000/api/clients';

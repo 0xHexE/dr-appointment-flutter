@@ -1,8 +1,5 @@
+import 'package:appointment_app/dashboard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/dashboard.dart';
-import 'package:flutter_app/new_appointment.dart';
-import './notification.dart';
-import 'package:flutter_app/calender.dart';
 
 // void main() => runApp(MyApp());
 void main() {
@@ -61,20 +58,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 accountEmail: Text('hello@hello.hello'),
                 currentAccountPicture: CircleAvatar(
                   child: Icon(Icons.zoom_out_map),
-                )
-            ),
+                )),
             ListTile(
               title: Text('test'),
               onTap: onTestTap,
             ),
-            ListTile (
+            ListTile(
               title: Text('*'),
               onTap: null,
             ),
           ],
         ),
       ),
-    body: Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
