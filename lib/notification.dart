@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/services/notification_service.dart';
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -51,6 +52,19 @@ class _NotificationPageState extends State<NotificationPage> {
                         onPressed: () { },
                       )
                     ],
+                  ),
+                  FutureBuilder(
+                    future: getNotifications(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          return Text('error');
+                        }
+                        return Text(snapshot.data.toString());
+                      }else {
+                        return CircularProgressIndicator();
+                      }
+                    },
                   )
                 ],
               ),

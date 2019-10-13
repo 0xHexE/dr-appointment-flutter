@@ -1,3 +1,10 @@
+import 'dart:convert';
+
+String newAppointmentToString(NewAppointmentModel data) {
+  final dyn = data.toJson();
+  return jsonEncode(dyn);
+}
+
 class NewAppointmentModel {
   String name;
   DateTime date;
@@ -20,4 +27,10 @@ class NewAppointmentModel {
       time: timeFromJson
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "date": date,
+    "time": time,
+  };
 }
