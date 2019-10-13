@@ -8,23 +8,23 @@ CalenderModel calenderModelFromJson(String str) {
 
 class CalenderModel {
   DateTime date;
-  List<String> appointment;
+  List<String> names;
   List<String> description;
 
   CalenderModel({
     this.date,
-    this.appointment,
+    this.names,
     this.description
   });
 
   factory CalenderModel.fromJson(Map<String, dynamic> parsedJson) {
-    var datefromJson = parsedJson['date']; //.toDate or something
-    var appointmentsFromJson = parsedJson['appointment'];
+    var dateFromJson = parsedJson['date']; //.toDate or something
+    var namesFromJson = parsedJson['appointment'];
     var descriptionFromJson = parsedJson['description'];
 
     return new CalenderModel(
-      date: datefromJson,
-      appointment: appointmentsFromJson,
+      date: dateFromJson,
+      names: namesFromJson,
       description: descriptionFromJson
     );
   }
