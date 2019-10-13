@@ -1,22 +1,24 @@
 // import 'package:appointment_app/client_list.dart';
-import 'package:appointment_app/client_list.dart';
-import 'package:appointment_app/my_account.dart';
-import 'package:appointment_app/notification.dart';
+import 'package:appointment_app/pages/client_list.dart';
+import 'package:appointment_app/pages/my_account.dart';
+import 'package:appointment_app/pages/notification.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DrawerInternal extends StatelessWidget {
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          DrawerHeader(
-            child: Row(
-              children: <Widget>[
-                Icon(Icons.person),
-              ],
+          UserAccountsDrawerHeader(
+            accountName: Text('hello'),
+            accountEmail: Text('hello@hello.hello'),
+            currentAccountPicture: CircleAvatar(
+              child: Icon(Icons.person),
             ),
-            decoration: BoxDecoration(),
           ),
           ListTile(
             title: Text('Dashboard'),
@@ -56,7 +58,7 @@ class DrawerInternal extends StatelessWidget {
           ListTile(
             title: Text('Logout'),
             onTap: () {
-              Navigator.pop(context);
+              _firebaseAuth.signOut();
             },
             leading: Icon(Icons.exit_to_app),
           ),

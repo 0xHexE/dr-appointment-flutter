@@ -1,9 +1,9 @@
 // import 'package:appointment_app/calendar.dart';
-import 'package:appointment_app/calender.dart';
+import 'package:appointment_app/pages/calender.dart';
 import 'package:flutter/material.dart';
 
-import 'components/drawer.dart';
-import 'components/menu_toggle_button.dart';
+import '../components/drawer.dart';
+import '../components/menu_toggle_button.dart';
 
 class Dashboard extends StatefulWidget {
   @override

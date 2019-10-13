@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "146227123892",
+    "firebase_url": "https://dr-appoitment.firebaseio.com",
+    "project_id": "dr-appoitment",
+    "storage_bucket": "dr-appoitment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146227123892:android:c027844f725d2e97e969e1",
+        "android_client_info": {
+          "package_name": "com.f4erp.appointment_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "146227123892-4rlajlj98rppiiolp3llf9197jfrce4e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE_ztg3fiynN1yTL7NYb_f1N6P5YLxT50"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "146227123892-4rlajlj98rppiiolp3llf9197jfrce4e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

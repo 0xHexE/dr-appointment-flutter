@@ -1,13 +1,12 @@
 import 'dart:math';
 
 import 'package:appointment_app/components/drawer.dart';
-import 'package:appointment_app/services/calender_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/standalone.dart';
 
-import 'components/calendar/calendar.dart';
+import '../components/calendar/calendar.dart';
 
 class Calendar extends StatefulWidget {
   @override
@@ -95,19 +94,6 @@ class _CalendarState extends State<Calendar> {
               }
             },
           ),
-          FutureBuilder(
-            future: getTodaySchedule(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return Text('error');
-                }
-                return Text(snapshot.data.toString());
-              } else {
-                return CircularProgressIndicator();
-              }
-            },
-          )
         ],
       ),
       drawer: DrawerInternal(),
