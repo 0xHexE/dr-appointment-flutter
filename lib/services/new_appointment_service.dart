@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:appointment_app/model/new_appointment_model.dart';
@@ -9,16 +8,12 @@ String id = '123';
 
 Future<http.Response> addNewAppointment(name, date, time) async {
   final response = await http.post('$url',
-    headers: {
-      HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.authorizationHeader: '',
-    },
-    body: newAppointmentToString(new NewAppointmentModel(
-        name: name,
-        date: date,
-        time: time
-    ))
-  );
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: '',
+      },
+      body: newAppointmentToString(
+          new NewAppointmentModel(name: name, date: date, time: time)));
 
   return response;
 }
