@@ -47,18 +47,18 @@ class _NotificationPageState extends State<NotificationPage> {
               child: ListView.builder(
                 itemCount: snapshot.data.notification.length,
                 itemBuilder: (context, i) {
-                  return Card(
+                  return new Card(
                     key: Key(snapshot.data.notification[i].name),
-                    child: Column(
+                    child: new Column(
                       children: <Widget>[
-                        ListTile(
+                        new ListTile(
                           leading: CircleAvatar(
-                            child: Text(snapshot.data.notification[i].name.toString()),
+                            child: Text(snapshot.data.notification[i].name.toString()[0].toUpperCase()),
                           ),
                           title: Text(snapshot.data.notification[i].name),
                           subtitle: Text(snapshot.data.notification[i].description),
                         ),
-                        ButtonBar(
+                        new ButtonBar(
                           children: <Widget>[
                             RaisedButton(
                               child: Text('Accept'),
