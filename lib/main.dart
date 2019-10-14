@@ -1,4 +1,4 @@
-import 'package:appointment_app/pages/dashboard.dart';
+import 'package:appointment_app/root.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:timezone/timezone.dart';
@@ -26,7 +26,7 @@ class MainAppState extends State<MainApp> {
       title: defaultConfig.appName,
       theme: defaultConfig.theme,
       showPerformanceOverlay: _showPerformanceOverlay,
-      home: new Dashboard(),
+      home: new Root(),
     );
   }
 }
