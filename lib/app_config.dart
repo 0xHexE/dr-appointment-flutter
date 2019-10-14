@@ -20,7 +20,7 @@ class AppConfig {
 /// The default configuration of the app.
 AppConfig get defaultConfig {
   return new AppConfig(
-    appName: 'Appointment Application',
+    appName: 'Charts Gallery',
     appLink: '',
     apiEndpoint: "http://localhost:3000/api/v1",
     theme: new ThemeData(

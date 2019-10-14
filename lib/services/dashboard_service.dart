@@ -5,6 +5,6 @@ String url = 'http://localhost:4000/api/dashboard';
 String id = '123';
 
 Future<DashboardModel> getDashboardData() async {
-  final response = await http.get('$url/$id');
+  final response = await http.get('$url/$id', headers: {});
   return dashboardModelFromJson(response.body);
 }

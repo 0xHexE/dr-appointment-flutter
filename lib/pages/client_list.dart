@@ -1,4 +1,3 @@
-// import 'package:appointment_app/new_client.dart';
 import 'package:appointment_app/pages/new_client.dart';
 import 'package:appointment_app/services/client_list_service.dart';
 import 'package:flutter/cupertino.dart';

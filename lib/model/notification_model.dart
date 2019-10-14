@@ -1,20 +1,46 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter_native_timezone/generated/i18n.dart';
 
 NotificationModel notificationModelFromJson(String str) {
   final jsonData = jsonDecode(str);
-  return NotificationModel.fromJson(jsonData);
+  if (jsonData.isEmpty) {
+    return null;
+  }else {
+    return NotificationModel.fromJson(jsonData['data']);
+  }
 }
 
 class NotificationModel {
-  List<String> key;
-  List<String> description;
-  List<String> name;
-  List<DateTime> date;
-  List<DateTime> time;
+  List<notifications> notification;
 
   NotificationModel({
+    this.notification
+  });
+
+  factory NotificationModel.fromJson(List<notifications> parsedJson) {
+
+    if (parsedJson == null) {
+      return null;
+    }
+
+    var n = parsedJson.toList();
+
+    return new NotificationModel(
+        notification: n
+    );
+  }
+}
+
+class notifications {
+  String key;
+  String description;
+  String name;
+  DateTime date;
+  DateTime time;
+
+  notifications({
     this.key,
     this.description,
     this.name,
@@ -22,25 +48,19 @@ class NotificationModel {
     this.time
   });
 
-  factory NotificationModel.fromJson(Map<String, dynamic> parsedJson) {
+  factory notifications.fromJson(Map<String, dynamic> parsedJson) {
     var keyFromJson = parsedJson['key'];
-    var descriptionFromJson = parsedJson['description'];
     var nameFromJson = parsedJson['name'];
-    var dateFromJson = parsedJson['date']; // toDate
-    var timeFromJson = parsedJson['time']; // toTime
+    var descriptionFromJson = parsedJson['description'];
+    var dateFromJson = DateTime.fromMicrosecondsSinceEpoch(parsedJson['date'] * 1000);
+    var timeFromJson = DateTime.fromMicrosecondsSinceEpoch(parsedJson['time'] * 1000);
 
-    var keyList = new List<String>.from(keyFromJson);
-    var descriptionList = new List<String>.from(descriptionFromJson);
-    var nameList = new List<String>.from(nameFromJson);
-    var dateList = new List<DateTime>.from(dateFromJson);
-    var timeList = new List<DateTime>.from(timeFromJson);
-
-    return new NotificationModel(
-      key: keyList,
-      description: descriptionList,
-      name: nameList,
-      date: dateList,
-      time: timeList
+    return new notifications(
+      key: keyFromJson,
+      name: nameFromJson,
+      description: descriptionFromJson,
+      date: dateFromJson,
+      time: timeFromJson
     );
   }
 }
