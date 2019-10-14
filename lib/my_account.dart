@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/my_account_model.dart';
-import 'package:flutter_app/services/my_account_service.dart';
+import 'package:appointment_app/model/my_account_model.dart';
+import 'package:appointment_app/services/my_account_service.dart';
 
 class MyAccount extends StatefulWidget {
   @override

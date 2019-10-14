@@ -1,8 +1,8 @@
 // import 'package:appointment_app/client_list.dart';
-import 'package:flutter_app/client_list.dart';
+import 'package:appointment_app/client_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/my_account.dart';
-import 'package:flutter_app/notification.dart';
+import 'package:appointment_app/my_account.dart';
+import 'package:appointment_app/notification.dart';
 
 class DrawerInternal extends StatelessWidget {
   @override

@@ -1,8 +1,8 @@
 // import 'package:appointment_app/new_client.dart';
-import 'package:flutter_app/new_client.dart';
+import 'package:appointment_app/new_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/client_list_service.dart';
+import 'package:appointment_app/services/client_list_service.dart';
 
 class ClientList extends StatefulWidget {
   @override

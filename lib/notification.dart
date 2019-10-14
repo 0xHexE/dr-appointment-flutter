@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/model/notification_model.dart';
-import 'package:flutter_app/services/notification_service.dart';
+import 'package:appointment_app/model/notification_model.dart';
+import 'package:appointment_app/services/notification_service.dart';
 
 class NotificationPage extends StatefulWidget {
   @override

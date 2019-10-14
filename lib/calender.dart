@@ -1,10 +1,10 @@
 import 'dart:math';
 
 // import 'package:appointment_app/components/drawer.dart';
-import 'package:flutter_app/components/drawer.dart';
+import 'package:appointment_app/components/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/calender_service.dart';
+import 'package:appointment_app/services/calender_service.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/standalone.dart';
 

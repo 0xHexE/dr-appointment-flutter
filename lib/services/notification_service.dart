@@ -1,5 +1,5 @@
 
-import 'package:flutter_app/model/notification_model.dart';
+import 'package:appointment_app/model/notification_model.dart';
 import 'package:http/http.dart' as http;
 
 // for testing with data OLD

@@ -1,7 +1,7 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/new_appointment_service.dart';
+import 'package:appointment_app/services/new_appointment_service.dart';
 import 'package:intl/intl.dart';
 
 class NewAppointment extends StatefulWidget {

@@ -1,7 +1,7 @@
 // import 'package:appointment_app/calendar.dart';
-import 'package:flutter_app/calender.dart';
+import 'package:appointment_app/calender.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/services/dashboard_service.dart';
+import 'package:appointment_app/services/dashboard_service.dart';
 
 import 'components/drawer.dart';
 import 'components/menu_toggle_button.dart';
