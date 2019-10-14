@@ -1,5 +1,6 @@
 // import 'package:appointment_app/calendar.dart';
 import 'package:appointment_app/pages/calender.dart';
+import 'package:appointment_app/pages/new_appointment.dart';
 import 'package:appointment_app/services/dashboard_service.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,12 @@ class _DashboardState extends State<Dashboard> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NewAppointment()),
+          );
+        },
       ),
       drawer: DrawerInternal(),
       bottomNavigationBar: BottomAppBar(

@@ -33,6 +33,7 @@ dependencies:
   firebase_analytics: ^5.0.2
   http_interceptor: ^0.1.1
   shared_preferences: ^0.5.3+4
+  flutter_redux: ^0.5.3
 
 dev_dependencies:
   flutter_test:

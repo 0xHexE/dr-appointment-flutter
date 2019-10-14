@@ -25,15 +25,14 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: defaultConfig.appName,
-      theme: defaultConfig.theme,
-      showPerformanceOverlay: _showPerformanceOverlay,
-      home: HttpClient(
+    return HttpClient(
         firebaseAuth: _firebaseAuth,
-        child: Root(),
-      ),
-    );
+        child: MaterialApp(
+          title: defaultConfig.appName,
+          theme: defaultConfig.theme,
+          showPerformanceOverlay: _showPerformanceOverlay,
+          home: Root(),
+        ));
   }
 }
 

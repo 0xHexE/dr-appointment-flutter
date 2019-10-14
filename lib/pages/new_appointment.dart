@@ -24,7 +24,9 @@ class _NewAppointmentState extends State<NewAppointment> {
         leading: IconButton(
           color: Colors.black,
           icon: Icon(Icons.arrow_back),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         backgroundColor: Colors.white,
       ),

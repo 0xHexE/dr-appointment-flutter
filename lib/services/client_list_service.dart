@@ -1,10 +1,7 @@
 import 'package:appointment_app/model/client_list_model.dart';
-import 'package:http/http.dart' as http;
+import 'package:appointment_app/utils/http_client.dart';
 
-String url = 'http://localhost:4000/api/clients';
-String id = '123';
-
-Future<ClientListModel> getClients() async {
-  final response = await http.get(url);
+Future<Clients> getClients(HttpClient httpClient) async {
+  final response = await httpClient.client.get("/clients");
   return clientListModelFromJson(response.body);
 }

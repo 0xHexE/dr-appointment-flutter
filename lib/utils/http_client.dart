@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 
+final String apiEndpoint = "http://10.0.2.2:3000/data/v1";
+
 class HttpClient extends InheritedWidget {
   HttpClient({Key key, Widget child, this.firebaseAuth})
       : super(key: key, child: child) {
@@ -32,6 +34,9 @@ class HttpClient extends InheritedWidget {
   bool updateShouldNotify(InheritedWidget oldWidget) {
     return true;
   }
+
+  static HttpClient of(BuildContext context) =>
+      context.inheritFromWidgetOfExactType(HttpClient);
 }
 
 class LoginInterceptor implements InterceptorContract {
@@ -59,9 +64,11 @@ class LoginInterceptor implements InterceptorContract {
 
   @override
   Future<RequestData> interceptRequest({RequestData data}) async {
-    if (currentToken == null) {
+    data.url = '$apiEndpoint${data.url}';
+    if (currentToken != null) {
       data.headers['Authorization'] = 'Bearer $currentToken';
     }
+    data.headers['Content-Type'] = 'application/json';
 
     return data;
   }
