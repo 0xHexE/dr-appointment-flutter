@@ -1,3 +1,4 @@
+import 'package:appointment_app/services/new_appointment_service.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,54 +16,44 @@ class _NewAppointmentState extends State<NewAppointment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'New Appointment',
-            style: TextStyle(color: Colors.black),
-          ),
-          leading: IconButton(
-            color: Colors.black,
-            icon: Icon(Icons.arrow_back),
-            onPressed: () { },
-          ),
-          backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          'New Appointment',
+          style: TextStyle(color: Colors.black),
         ),
-      body: Center (
+        leading: IconButton(
+          color: Colors.black,
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {},
+        ),
+        backgroundColor: Colors.white,
+      ),
+      body: Center(
         child: ListView(
           padding: EdgeInsets.all(10),
           children: <Widget>[
             TextField(
-              decoration: InputDecoration(
-                filled: true,
-                labelText: 'Name'
-              ),
+              decoration: InputDecoration(filled: true, labelText: 'Name'),
             ),
             DateTimeField(
-              decoration: InputDecoration(
-                filled: true,
-                labelText: 'Pick Date'
-              ),
+              decoration: InputDecoration(filled: true, labelText: 'Pick Date'),
               format: dateFormat,
-              onShowPicker: (context, currentValue ) {
+              onShowPicker: (context, currentValue) {
                 return showDatePicker(
                     context: context,
                     firstDate: DateTime(1900),
                     initialDate: currentValue ?? DateTime.now(),
-                    lastDate: DateTime(2100)
-                );
+                    lastDate: DateTime(2100));
               },
             ),
             DateTimeField(
-              decoration: InputDecoration(
-                filled: true,
-                labelText: 'Pick Time'
-              ),
+              decoration: InputDecoration(filled: true, labelText: 'Pick Time'),
               format: timeFormat,
               onShowPicker: (context, currentValue) async {
                 final time = await showTimePicker(
                     context: context,
-                    initialTime: TimeOfDay.fromDateTime(currentValue ?? DateTime.now())
-                );
+                    initialTime:
+                        TimeOfDay.fromDateTime(currentValue ?? DateTime.now()));
                 return DateTimeField.convert(time);
               },
             )
@@ -74,11 +65,13 @@ class _NewAppointmentState extends State<NewAppointment> {
           }).toList(),
         ),
       ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          isExtended: true,
-          child: Icon(Icons.save),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          final res = addNewAppointment('test', 'testDate', 'testTime');
+        },
+        isExtended: true,
+        child: Icon(Icons.save),
+      ),
     );
   }
 }

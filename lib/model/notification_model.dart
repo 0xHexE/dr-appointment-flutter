@@ -1,3 +1,10 @@
+import 'dart:convert';
+
+NotificationModel notificationModelFromJson(String str) {
+  final jsonData = jsonDecode(str);
+  return NotificationModel.fromJson(jsonData);
+}
+
 class NotificationModel {
   List<String> description;
   List<String> name;

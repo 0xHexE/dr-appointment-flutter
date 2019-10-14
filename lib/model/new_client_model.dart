@@ -1,3 +1,10 @@
+import 'dart:convert';
+
+String newClientModelToString(NewClientModel data) {
+  final dyn = data.toJson();
+  return jsonEncode(dyn);
+}
+
 class NewClientModel {
   String name;
   String address;
@@ -24,4 +31,11 @@ class NewClientModel {
       dateOfBirth: dateOfBirthFromJson
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "address": address,
+    "email": email,
+    "dateOfBirth": dateOfBirth
+  };
 }

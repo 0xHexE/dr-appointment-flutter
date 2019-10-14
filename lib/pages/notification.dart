@@ -1,3 +1,4 @@
+import 'package:appointment_app/services/notification_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,11 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  final notificationList = [ { 'title': 'title 1' }, { 'title': 'title 2' }, { 'title': 'title 3' } ];
+  final notificationList = [
+    {'title': 'title 1'},
+    {'title': 'title 2'},
+    {'title': 'title 3'}
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,37 +32,50 @@ class _NotificationPageState extends State<NotificationPage> {
         backgroundColor: Colors.white,
       ),
       body: Center(
-        child: ListView.builder(
-          itemCount: notificationList.length,
-          itemBuilder: (context, i) {
-            return Card(
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    leading: CircleAvatar(
-                      child: Text('TT'),
-                    ),
-                    title: Text(notificationList.elementAt(i).toString()),
-                    subtitle: Text(notificationList.elementAt(i).toString()),
-                  ),
-                  ButtonBar (
+          child: ListView.builder(
+              itemCount: notificationList.length,
+              itemBuilder: (context, i) {
+                return Card(
+                  child: Column(
                     children: <Widget>[
-                      RaisedButton(
-                        child: Text('Accept'),
-                        onPressed: () { },
+                      ListTile(
+                        leading: CircleAvatar(
+                          child: Text('TT'),
+                        ),
+                        title: Text(notificationList.elementAt(i).toString()),
+                        subtitle:
+                            Text(notificationList.elementAt(i).toString()),
                       ),
-                      FlatButton (
-                        child: Text('Reject'),
-                        onPressed: () { },
+                      ButtonBar(
+                        children: <Widget>[
+                          RaisedButton(
+                            child: Text('Accept'),
+                            onPressed: () {},
+                          ),
+                          FlatButton(
+                            child: Text('Reject'),
+                            onPressed: () {},
+                          )
+                        ],
+                      ),
+                      FutureBuilder(
+                        future: getNotifications(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            if (snapshot.hasError) {
+                              return Text('error');
+                            }
+                            return Text(snapshot.data.toString());
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        },
                       )
                     ],
-                  )
-                ],
-              ),
-            );
-          }
-        )
-      ),
+                  ),
+                );
+              })),
     );
   }
 }

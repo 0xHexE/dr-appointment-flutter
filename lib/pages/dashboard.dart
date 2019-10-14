@@ -1,5 +1,6 @@
 // import 'package:appointment_app/calendar.dart';
 import 'package:appointment_app/pages/calender.dart';
+import 'package:appointment_app/services/dashboard_service.dart';
 import 'package:flutter/material.dart';
 
 import '../components/drawer.dart';
@@ -15,7 +16,21 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        children: <Widget>[],
+        children: <Widget>[
+          FutureBuilder(
+            future: getDashboardData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  return Text('error');
+                }
+                return Text(snapshot.data.toString());
+              } else {
+                return CircularProgressIndicator();
+              }
+            },
+          )
+        ],
       ),
       appBar: AppBar(
         backgroundColor: Colors.white,

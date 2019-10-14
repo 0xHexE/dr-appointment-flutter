@@ -1,3 +1,11 @@
+
+import 'dart:convert';
+
+DashboardModel dashboardModelFromJson(String str) {
+  final jsonData = jsonDecode(str);
+  return DashboardModel.fromJson(jsonData);
+}
+
 class DashboardModel {
   int remainingClients;
   List<String> clientNames;

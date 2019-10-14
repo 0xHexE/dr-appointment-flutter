@@ -1,24 +1,47 @@
-import 'package:appointment_app/root.dart';
+import 'package:appointment_app/pages/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:timezone/timezone.dart';
 
-// void main() => runApp(MyApp());
-void main() {
-  runApp(MyApp());
+import 'app_config.dart';
+
+/// The main gallery app widget.
+class MainApp extends StatefulWidget {
+  MainApp({Key key}) : super(key: key);
+
+  @override
+  MainAppState createState() => new MainAppState();
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+/// The main gallery app state.
+///
+/// Controls performance overlay, and instantiates a [Home] widget.
+class MainAppState extends State<MainApp> {
+  // Initialize app settings from the default configuration.
+  bool _showPerformanceOverlay = defaultConfig.showPerformanceOverlay;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Appointment Application',
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-      ),
-      home: Root(),
-      routes: <String, WidgetBuilder>{
-//        'showHomePage': (BuildContext context) => MyHomePage(title: 'test'),
-      },
+    return new MaterialApp(
+      title: defaultConfig.appName,
+      theme: defaultConfig.theme,
+      showPerformanceOverlay: _showPerformanceOverlay,
+      home: new Dashboard(),
     );
   }
+}
+
+void main() async {
+  ByteData loadedData;
+
+  await Future.wait<void>(<Future<void>>[
+    rootBundle.load('assets/2019b.tzf').then((ByteData data) {
+      loadedData = data;
+      print('loaded data');
+    })
+  ]);
+
+  initializeDatabase(loadedData.buffer.asUint8List());
+
+  runApp(new MainApp());
 }
