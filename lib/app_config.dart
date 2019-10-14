@@ -14,7 +14,7 @@ class AppConfig {
 /// The default configuration of the app.
 AppConfig get defaultConfig {
   return new AppConfig(
-    appName: 'Appointment Application',
+    appName: 'Charts Gallery',
     appLink: '',
     theme: new ThemeData(
       brightness: Brightness.light,

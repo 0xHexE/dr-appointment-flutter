@@ -1,24 +1,22 @@
 // import 'package:appointment_app/client_list.dart';
-import 'package:appointment_app/pages/client_list.dart';
-import 'package:appointment_app/pages/my_account.dart';
-import 'package:appointment_app/pages/notification.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_app/client_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/my_account.dart';
+import 'package:flutter_app/notification.dart';
 
 class DrawerInternal extends StatelessWidget {
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text('hello'),
-            accountEmail: Text('hello@hello.hello'),
-            currentAccountPicture: CircleAvatar(
-              child: Icon(Icons.person),
+          DrawerHeader(
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.person),
+              ],
             ),
+            decoration: BoxDecoration(),
           ),
           ListTile(
             title: Text('Dashboard'),
@@ -30,8 +28,10 @@ class DrawerInternal extends StatelessWidget {
           ListTile(
             title: Text('Notifications'),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationPage())
+              );
             },
             leading: Icon(Icons.notifications),
           ),
@@ -50,7 +50,7 @@ class DrawerInternal extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyAccount()),
+                MaterialPageRoute(builder: (context)=> MyAccount()),
               );
             },
             leading: Icon(Icons.person),
@@ -58,7 +58,7 @@ class DrawerInternal extends StatelessWidget {
           ListTile(
             title: Text('Logout'),
             onTap: () {
-              _firebaseAuth.signOut();
+              Navigator.pop(context);
             },
             leading: Icon(Icons.exit_to_app),
           ),

@@ -1,4 +1,5 @@
-import 'package:appointment_app/model/calender_model.dart';
+
+import 'package:flutter_app/model/calender_model.dart';
 import 'package:http/http.dart' as http;
 
 String url = 'http://localhost:4000/api/calender';
