@@ -22,7 +22,7 @@ class _DashboardState extends State<Dashboard> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
-                  return Text('error');
+                  return Text(snapshot.error.toString());
                 }
                 return Text(snapshot.data.toString());
               } else {
@@ -31,9 +31,6 @@ class _DashboardState extends State<Dashboard> {
             },
           )
         ],
-      ),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(

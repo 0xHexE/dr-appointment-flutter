@@ -6,9 +6,15 @@ class AppConfig {
   final String appLink;
   final ThemeData theme;
   final bool showPerformanceOverlay;
+  final String apiEndpoint;
 
-  AppConfig(
-      {this.appName, this.appLink, this.theme, this.showPerformanceOverlay});
+  AppConfig({
+    this.appName,
+    this.appLink,
+    this.theme,
+    this.showPerformanceOverlay,
+    this.apiEndpoint,
+  });
 }
 
 /// The default configuration of the app.
@@ -16,6 +22,7 @@ AppConfig get defaultConfig {
   return new AppConfig(
     appName: 'Appointment Application',
     appLink: '',
+    apiEndpoint: "http://localhost:3000/api/v1",
     theme: new ThemeData(
       brightness: Brightness.light,
       primarySwatch: Colors.deepPurple,

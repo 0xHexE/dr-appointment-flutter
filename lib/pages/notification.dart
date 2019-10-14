@@ -71,7 +71,7 @@ class _NotificationPageState extends State<NotificationPage> {
                             return CircularProgressIndicator();
                           }
                         },
-                      )
+                      ),
                     ],
                   ),
                 );

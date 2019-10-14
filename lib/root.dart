@@ -49,7 +49,6 @@ class _RootState extends State<Root> {
               return Login();
             }
         }
-
         return null;
       },
     );

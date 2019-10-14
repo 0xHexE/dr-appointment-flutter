@@ -10,13 +10,13 @@ class MainApp extends StatefulWidget {
   MainApp({Key key}) : super(key: key);
 
   @override
-  MainAppState createState() => new MainAppState();
+  _MainAppState createState() => new _MainAppState();
 }
 
 /// The main gallery app state.
 ///
 /// Controls performance overlay, and instantiates a [Home] widget.
-class MainAppState extends State<MainApp> {
+class _MainAppState extends State<MainApp> {
   // Initialize app settings from the default configuration.
   bool _showPerformanceOverlay = defaultConfig.showPerformanceOverlay;
 

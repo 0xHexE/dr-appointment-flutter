@@ -100,7 +100,7 @@ class _CalendarState extends State<Calendar> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
-                  return Text('error');
+                  return Text(snapshot.error.toString());
                 }
                 return Text(snapshot.data.toString());
               } else {

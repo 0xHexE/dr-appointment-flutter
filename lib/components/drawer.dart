@@ -1,29 +1,30 @@
 // import 'package:appointment_app/client_list.dart';
+import 'dart:async';
+
 import 'package:appointment_app/pages/client_list.dart';
+import 'package:appointment_app/pages/dashboard.dart';
 import 'package:appointment_app/pages/my_account.dart';
 import 'package:appointment_app/pages/notification.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DrawerInternal extends StatelessWidget {
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text('hello'),
-            accountEmail: Text('hello@hello.hello'),
-            currentAccountPicture: CircleAvatar(
-              child: Icon(Icons.person),
-            ),
-          ),
+          AccountName(),
           ListTile(
             title: Text('Dashboard'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Dashboard(),
+                ),
+              );
             },
             leading: Icon(Icons.dashboard),
           ),
@@ -64,6 +65,60 @@ class DrawerInternal extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class AccountName extends StatefulWidget {
+  @override
+  _AccountNameState createState() => _AccountNameState();
+}
+
+class _AccountNameState extends State<AccountName> {
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  Future<FirebaseUser> _firebaseUser = FirebaseAuth.instance.currentUser();
+  StreamSubscription _firebaseUserStram;
+
+  @override
+  void initState() {
+    _firebaseUserStram = _firebaseAuth.onAuthStateChanged.listen((data) {
+      this._firebaseUser = Future.value(data);
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _firebaseUserStram.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _firebaseUser,
+      builder: (BuildContext context,
+          AsyncSnapshot<FirebaseUser> _firebaseUserInstance) {
+        switch (_firebaseUserInstance.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+          case ConnectionState.active:
+            return Column();
+          case ConnectionState.done:
+            if (_firebaseUserInstance.hasData) {
+              return UserAccountsDrawerHeader(
+                accountName: Text(_firebaseUserInstance.data.displayName ?? ""),
+                accountEmail: Text(_firebaseUserInstance.data.email),
+                currentAccountPicture: CircleAvatar(
+                  child: _firebaseUserInstance.data.photoUrl != null
+                      ? Image.network(_firebaseUserInstance.data.photoUrl)
+                      : Icon(Icons.person),
+                ),
+              );
+            }
+        }
+        return Column();
+      },
     );
   }
 }
