@@ -8,74 +8,84 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  final notificationList = [
-    {'title': 'title 1'},
-    {'title': 'title 2'},
-    {'title': 'title 3'}
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Notifications',
-          style: TextStyle(color: Colors.black),
+        appBar: AppBar(
+          title: Text(
+            'Notifications',
+            style: TextStyle(color: Colors.black),
+          ),
+          leading: IconButton(
+            color: Colors.black,
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          backgroundColor: Colors.white,
         ),
-        leading: IconButton(
-          color: Colors.black,
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        backgroundColor: Colors.white,
-      ),
-      body: Center(
-          child: ListView.builder(
-              itemCount: notificationList.length,
-              itemBuilder: (context, i) {
-                return Card(
-                  child: Column(
-                    children: <Widget>[
-                      ListTile(
-                        leading: CircleAvatar(
-                          child: Text('TT'),
-                        ),
-                        title: Text(notificationList.elementAt(i).toString()),
-                        subtitle:
-                            Text(notificationList.elementAt(i).toString()),
-                      ),
-                      ButtonBar(
+        body: FutureBuilder(
+          future: getNotifications(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.data == null && !snapshot.hasError) {
+                return AlertDialog(
+                  title: Text("No New Appointments"),
+                  content: Text("Come back later"),
+                );
+              }
+
+              if (snapshot.hasError) {
+                return AlertDialog(
+                  title: Text("Error"),
+                  content: Text("Check Internet Connection" +
+                      " " +
+                      snapshot.error.toString()),
+                );
+              }
+              return new Center(
+                child: ListView.builder(
+                  itemCount: snapshot.data.notification.length,
+                  itemBuilder: (context, i) {
+                    return new Card(
+                      key: Key(snapshot.data.notification[i].name),
+                      child: new Column(
                         children: <Widget>[
-                          RaisedButton(
-                            child: Text('Accept'),
-                            onPressed: () {},
+                          new ListTile(
+                            leading: CircleAvatar(
+                              child: Text(snapshot.data.notification[i].name
+                                  .toString()[0]
+                                  .toUpperCase()),
+                            ),
+                            title: Text(snapshot.data.notification[i].name),
+                            subtitle:
+                                Text(snapshot.data.notification[i].description),
                           ),
-                          FlatButton(
-                            child: Text('Reject'),
-                            onPressed: () {},
+                          new ButtonBar(
+                            children: <Widget>[
+                              RaisedButton(
+                                child: Text('Accept'),
+                                onPressed: () {},
+                              ),
+                              FlatButton(
+                                child: Text('Reject'),
+                                onPressed: () {},
+                              )
+                            ],
                           )
                         ],
                       ),
-                      FutureBuilder(
-                        future: getNotifications(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            if (snapshot.hasError) {
-                              return Text('error');
-                            }
-                            return Text(snapshot.data.toString());
-                          } else {
-                            return CircularProgressIndicator();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              })),
-    );
+                    );
+                  },
+                ),
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ));
   }
 }

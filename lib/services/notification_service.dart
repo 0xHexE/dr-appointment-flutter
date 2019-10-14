@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 // for testing with data OLD
 // String url = 'http://www.mocky.io/v2/5da4557b3500003a004a75f7';
 
-String url = 'http://www.mocky.io/v2/5da470883500005f004a7717';
+String url = 'http://www.mocky.io/v2/5da4ab0935000063004a788a';
 
 // for testing with empty json like {}
 // String url = 'http://www.mocky.io/v2/5da4640f35000054004a768b';

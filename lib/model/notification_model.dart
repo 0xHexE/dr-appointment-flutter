@@ -1,14 +1,11 @@
 import 'dart:convert';
-import 'dart:ffi';
-
-import 'package:flutter_native_timezone/generated/i18n.dart';
 
 NotificationModel notificationModelFromJson(String str) {
   final jsonData = jsonDecode(str);
   if (jsonData.isEmpty) {
     return null;
   }else {
-    return NotificationModel.fromJson(jsonData['data']);
+    return NotificationModel.fromJson(jsonData);
   }
 }
 
@@ -19,13 +16,17 @@ class NotificationModel {
     this.notification
   });
 
-  factory NotificationModel.fromJson(List<notifications> parsedJson) {
+  factory NotificationModel.fromJson(Map<String, dynamic> parsedJson) {
 
     if (parsedJson == null) {
       return null;
     }
 
-    var n = parsedJson.toList();
+    List<notifications> n = new List();
+    var parsedDataFromJson = parsedJson['data'];
+    for(var i = 0; i < parsedDataFromJson.length; i++) {
+      n.add(notifications.fromJson(parsedDataFromJson[i]));
+    }
 
     return new NotificationModel(
         notification: n
