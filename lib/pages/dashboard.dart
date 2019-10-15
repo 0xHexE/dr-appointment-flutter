@@ -1,5 +1,9 @@
 // import 'package:appointment_app/calendar.dart';
+import 'package:appointment_app/components/dashboard/chart.dart';
+import 'package:appointment_app/components/dashboard/next_appoitment.dart';
+import 'package:appointment_app/model/dashboard_model.dart';
 import 'package:appointment_app/pages/calender.dart';
+import 'package:appointment_app/pages/client_list.dart';
 import 'package:appointment_app/pages/new_appointment.dart';
 import 'package:appointment_app/services/dashboard_service.dart';
 import 'package:flutter/material.dart';
@@ -16,22 +20,61 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: <Widget>[
-          FutureBuilder(
-            future: getDashboardData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasError) {
-                  return Text(snapshot.error.toString());
-                }
-                return Text(snapshot.data.toString());
-              } else {
-                return CircularProgressIndicator();
+      body: Container(
+        child: FutureBuilder<DashboardData>(
+          future: getDashboardData(context),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
               }
-            },
-          )
-        ],
+
+              final data = snapshot.data.data.map((res) {
+                switch (res.chartType) {
+                  case "gauge":
+                    return SizedBox(
+                        height: 340.0,
+                        child: GaugeChart(
+                          GaugeChart.fromDashboardData(res.data),
+                          animate: true,
+                        ));
+                  default:
+                    return Text("Chart is not supported");
+                }
+              }).map((res) {
+                return Padding(
+                  child: res,
+                  padding: EdgeInsets.all(8.0),
+                );
+              });
+              return ListView(
+                children: [
+                  ...data,
+                  Text(
+                    "Total appointments of today",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 12.0,
+                      bottom: 12.0,
+                    ),
+                    child: Text(
+                      "Next appointment in 30 mins",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.body2.copyWith(),
+                    ),
+                  ),
+                  Divider(),
+                  NextAppointmentData(),
+                ],
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
@@ -61,7 +104,12 @@ class _DashboardState extends State<Dashboard> {
             ),
             IconButton(
               icon: Icon(Icons.person),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ClientList()),
+                );
+              },
             ),
           ],
         ),

@@ -28,7 +28,9 @@ class _ClientListState extends State<ClientList> {
             }
 
             if (snapshot.data.data.length == 0) {
-              return Text("No clients found");
+              return Center(
+                child: Text("No clients found"),
+              );
             }
 
             return ListView.builder(

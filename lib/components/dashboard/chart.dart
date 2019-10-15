@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:appointment_app/model/dashboard_model.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
@@ -32,6 +33,24 @@ class GaugeChart extends StatelessWidget {
         arcLength: 7 / 5 * pi,
       ),
     );
+  }
+
+  static List<charts.Series<GaugeSegment, String>> fromDashboardData(
+      List<DatumDatum> inputData) {
+    final data = inputData.map((res) {
+      return GaugeSegment(res.segment, res.value);
+    });
+
+    return [
+      new charts.Series<GaugeSegment, String>(
+        id: 'Segments',
+        domainFn: (GaugeSegment segment, _) => segment.segment,
+        measureFn: (GaugeSegment segment, _) => segment.size,
+        data: data.map((res) {
+          return GaugeSegment(res.segment, res.size);
+        }).toList(),
+      )
+    ];
   }
 
   /// Create one series with sample hard coded data.
