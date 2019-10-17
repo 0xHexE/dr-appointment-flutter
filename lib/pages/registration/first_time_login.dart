@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:appointment_app/pages/client_info.dart';
+import 'package:appointment_app/pages/registration/waiting-for-confirm.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +21,7 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
   final _addressController = TextEditingController();
   final _dateOfBirthController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _mobileNumberController = TextEditingController();
 
   var isLoading = false;
 
@@ -37,14 +38,13 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
     ));
     isLoading = true;
 
-    print(json.encode(
-      {
-        "name": _nameController.text,
-        "address": _addressController.text,
-        "dateOfBirth": _dateOfBirthController.text,
-        "description": _descriptionController.text,
-      },
-    ));
+    final date = _dateOfBirthController.text;
+
+    final dateArray = date.split("-");
+
+    final dateOfBirth = DateTime.utc(int.parse(dateArray[2]),
+        int.parse(dateArray[1]), int.parse(dateArray[0]));
+
     HttpClient.of(context)
         .client
         .post(
@@ -53,19 +53,18 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
             {
               "name": _nameController.text,
               "address": _addressController.text,
-              "dateOfBirth": _dateOfBirthController.text,
+              "dateOfBirth": dateOfBirth.millisecondsSinceEpoch,
               "description": _descriptionController.text,
+              "mobile": _mobileNumberController.text,
             },
           ),
         )
         .then((res) {
       data.close();
       final decodedBody = json.decode(res.body);
-      Navigator.of(context).push(
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (BuildContext context) => ClientInfo(
-            clientId: decodedBody['id'],
-          ),
+          builder: (BuildContext context) => WaitingForConfirm(),
         ),
       );
     }).catchError((dynamic err) {
@@ -82,6 +81,7 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
     _addressController.dispose();
     _dateOfBirthController.dispose();
     _descriptionController.dispose();
+    _mobileNumberController.dispose();
     super.dispose();
   }
 
@@ -113,6 +113,25 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
               validator: (res) {
                 if (res.trim() == "") {
                   return "Name is required";
+                } else {
+                  return null;
+                }
+              },
+              enabled: !isLoading,
+            ),
+            TextFormField(
+              controller: _mobileNumberController,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                filled: true,
+                labelText: 'Mobile',
+                hintText: 'Mobile',
+              ),
+              validator: (res) {
+                if (res.trim() == "") {
+                  return "Mobile is required";
+                } else if (res.trim().length != 10) {
+                  return "Invalid mobile";
                 } else {
                   return null;
                 }

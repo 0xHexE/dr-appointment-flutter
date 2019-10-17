@@ -1,6 +1,7 @@
 import 'package:appointment_app/auth/login.dart';
 import 'package:appointment_app/pages/dashboard.dart';
 import 'package:appointment_app/pages/registration/first_time_login.dart';
+import 'package:appointment_app/pages/registration/waiting-for-confirm.dart';
 import 'package:appointment_app/services/authentication.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -76,7 +77,7 @@ class CheckIsFirstTimeLogin extends StatelessWidget {
     this.future = this.isHaveDatabase();
   }
 
-  Future<dynamic> future;
+  Future<Response> future;
 
   final Widget dashboard, firstTimeLogin;
   final FirebaseAuth firebaseAuth;
@@ -100,16 +101,13 @@ class CheckIsFirstTimeLogin extends StatelessWidget {
             );
           }
           final userStatus = UserStatus.fromJson(snapshot.data.body);
+          print(snapshot.data.body);
           switch (userStatus.data.status) {
             case "not-registered":
               return FirstTimeLoginPage();
             case "pending":
-              return Scaffold(
-                body: Center(
-                  child: Text("Waiting for confirmation"),
-                ),
-              );
-            case "done":
+              return WaitingForConfirm();
+            case "approved":
               return Dashboard();
           }
           return null;
