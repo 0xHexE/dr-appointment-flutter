@@ -1,3 +1,4 @@
+import 'package:appointment_app/pages/registration/first_time_login.dart';
 import 'package:appointment_app/utils/is-email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +17,15 @@ class _RegistrationState extends State<Registration> {
   TextEditingController _emailController = TextEditingController(),
       _passwordController = TextEditingController();
 
-  void onAuthSuccess(AuthResult authResult) {}
+  bool isLoading = false;
+
+  void onAuthSuccess(AuthResult authResult) {
+    isLoading = false;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => FirstTimeLoginPage()),
+    );
+  }
 
   void onAuthFailure(PlatformException exception) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -32,13 +41,23 @@ class _RegistrationState extends State<Registration> {
         key: _formKey,
         child: ListView(
           children: <Widget>[
-            TextFormField(
-              validator: isEmail,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                hintText: "Email address",
+            Padding(
+              padding: const EdgeInsets.only(top: 56.0),
+              child: Text(
+                'Create your account to get started',
+                style: Theme.of(context).textTheme.headline,
               ),
-              controller: _emailController,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: TextFormField(
+                validator: isEmail,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: "Email address",
+                ),
+                controller: _emailController,
+              ),
             ),
             TextFormField(
               validator: minWidth,
@@ -51,8 +70,11 @@ class _RegistrationState extends State<Registration> {
             ButtonBar(
               children: <Widget>[
                 RaisedButton(
-                  child: Text("Sign up"),
+                  child: Text(isLoading ? "Creating account.." : "Sign up"),
                   onPressed: () {
+                    if (isLoading) {
+                      return;
+                    }
                     _firebaseAuth
                         .createUserWithEmailAndPassword(
                           email: _emailController.text,
@@ -67,7 +89,16 @@ class _RegistrationState extends State<Registration> {
               ],
               alignment: MainAxisAlignment.end,
             ),
-          ],
+          ].map((res) {
+            return Padding(
+              child: res,
+              padding: EdgeInsets.only(
+                bottom: 16.0,
+                right: 22.0,
+                left: 22.0,
+              ),
+            );
+          }).toList(),
         ),
       ),
     );

@@ -1,5 +1,4 @@
-import 'package:appointment_app/model/my_account_model.dart';
-import 'package:appointment_app/services/my_account_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +8,8 @@ class MyAccount extends StatefulWidget {
 }
 
 class _MyAccountState extends State<MyAccount> {
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,16 +21,24 @@ class _MyAccountState extends State<MyAccount> {
               Navigator.of(context).pop();
             },
           )),
-      body: FutureBuilder<MyAccountModel>(
-        future: getAccountInfo(),
+      body: FutureBuilder<FirebaseUser>(
+        future: _firebaseAuth.onAuthStateChanged.first,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
               return Text('error');
             }
-            return Text(snapshot.data.toString());
+            return Center(
+              child: Text(
+                "Hey " + snapshot.data.displayName + "\n" + snapshot.data.email,
+                style: Theme.of(context).textTheme.headline,
+                textAlign: TextAlign.center,
+              ),
+            );
           } else {
-            return CircularProgressIndicator();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
         },
       ),

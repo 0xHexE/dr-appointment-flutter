@@ -1,5 +1,5 @@
 import 'package:appointment_app/model/client_list_model.dart';
-import 'package:appointment_app/pages/new_client.dart';
+import 'package:appointment_app/pages/create_user.dart';
 import 'package:appointment_app/services/client_list_service.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,7 +56,11 @@ class _ClientListState extends State<ClientList> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NewClient()),
+            MaterialPageRoute(
+              builder: (context) => CreateUserPage(
+                type: 'client',
+              ),
+            ),
           );
         },
         icon: Icon(Icons.add),

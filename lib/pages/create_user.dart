@@ -6,12 +6,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CreateDoctorPage extends StatefulWidget {
+class CreateUserPage extends StatefulWidget {
+  CreateUserPage({@required this.type});
+
+  String type;
+
   @override
-  _CreateDoctorPageState createState() => _CreateDoctorPageState();
+  _CreateUserPageState createState() => _CreateUserPageState(type: type);
 }
 
-class _CreateDoctorPageState extends State<CreateDoctorPage> {
+class _CreateUserPageState extends State<CreateUserPage> {
+  _CreateUserPageState({@required this.type}) {
+    print(this.type);
+  }
+  final String type;
   final format = DateFormat("dd-MM-yyyy");
   final _form = GlobalKey<FormState>();
   final _scaffold = GlobalKey<ScaffoldState>();
@@ -46,7 +54,7 @@ class _CreateDoctorPageState extends State<CreateDoctorPage> {
     HttpClient.of(context)
         .client
         .post(
-          "/admin/doctor",
+          "/admin/add-user",
           body: json.encode(
             {
               "name": _nameController.text,
@@ -54,6 +62,7 @@ class _CreateDoctorPageState extends State<CreateDoctorPage> {
               "dateOfBirth": dateOfBirth.millisecondsSinceEpoch,
               "mobile": _mobileNumberController.text,
               "email": _emailController.text,
+              "type": type
             },
           ),
         )
@@ -66,7 +75,7 @@ class _CreateDoctorPageState extends State<CreateDoctorPage> {
         data.close();
       } catch (e) {}
       isLoading = false;
-      final snackError = _scaffold.currentState.showSnackBar(SnackBar(
+      _scaffold.currentState.showSnackBar(SnackBar(
         content: Text(err.body.toString()),
       ));
     });
@@ -92,12 +101,12 @@ class _CreateDoctorPageState extends State<CreateDoctorPage> {
           padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 36.0),
           children: <Widget>[
             Text(
-              "Fill out your information",
+              "Create new user",
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.title,
             ),
             Text(
-              "to continue with us",
+              "Fill out the form",
               textAlign: TextAlign.center,
             ),
             TextFormField(
