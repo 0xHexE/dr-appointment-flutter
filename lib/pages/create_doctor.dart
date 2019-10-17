@@ -1,18 +1,17 @@
 import 'dart:convert';
 
-import 'package:appointment_app/pages/registration/waiting-for-confirm.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class FirstTimeLoginPage extends StatefulWidget {
+class CreateDoctorPage extends StatefulWidget {
   @override
-  _FirstTimeLoginPageState createState() => _FirstTimeLoginPageState();
+  _CreateDoctorPageState createState() => _CreateDoctorPageState();
 }
 
-class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
+class _CreateDoctorPageState extends State<CreateDoctorPage> {
   final format = DateFormat("dd-MM-yyyy");
   final _form = GlobalKey<FormState>();
   final _scaffold = GlobalKey<ScaffoldState>();
@@ -20,8 +19,8 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
   final _nameController = TextEditingController();
   final _addressController = TextEditingController();
   final _dateOfBirthController = TextEditingController();
-  final _descriptionController = TextEditingController();
   final _mobileNumberController = TextEditingController();
+  final _emailController = TextEditingController();
 
   var isLoading = false;
 
@@ -36,9 +35,7 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
     final data = _scaffold.currentState.showSnackBar(SnackBar(
       content: Text('Creating...'),
     ));
-
     isLoading = true;
-
     final date = _dateOfBirthController.text;
 
     final dateArray = date.split("-");
@@ -46,36 +43,33 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
     final dateOfBirth = DateTime.utc(int.parse(dateArray[2]),
         int.parse(dateArray[1]), int.parse(dateArray[0]));
 
-    await HttpClient.of(context)
+    HttpClient.of(context)
         .client
         .post(
-          "/onboard/start",
+          "/admin/doctor",
           body: json.encode(
             {
               "name": _nameController.text,
               "address": _addressController.text,
               "dateOfBirth": dateOfBirth.millisecondsSinceEpoch,
-              "description": _descriptionController.text,
               "mobile": _mobileNumberController.text,
+              "email": _emailController.text,
             },
           ),
         )
         .then((res) {
       data.close();
       final decodedBody = json.decode(res.body);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (BuildContext context) => WaitingForConfirm(),
-        ),
-      );
+      Navigator.of(context).pop();
     }).catchError((dynamic err) {
-      data.close();
+      try {
+        data.close();
+      } catch (e) {}
+      isLoading = false;
       final snackError = _scaffold.currentState.showSnackBar(SnackBar(
         content: Text(err.body.toString()),
       ));
     });
-
-    isLoading = false;
   }
 
   @override
@@ -83,8 +77,8 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
     _nameController.dispose();
     _addressController.dispose();
     _dateOfBirthController.dispose();
-    _descriptionController.dispose();
     _mobileNumberController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -142,6 +136,16 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
               enabled: !isLoading,
             ),
             TextFormField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                filled: true,
+                labelText: 'Email',
+                hintText: 'Email',
+              ),
+              enabled: !isLoading,
+            ),
+            TextFormField(
               controller: _addressController,
               decoration: InputDecoration(
                 filled: true,
@@ -183,24 +187,6 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
                   lastDate: DateTime(2100),
                 );
               },
-            ),
-            TextFormField(
-              controller: _descriptionController,
-              decoration: InputDecoration(
-                filled: true,
-                labelText: 'Description',
-                hintText: 'Description',
-              ),
-              maxLines: 3,
-              minLines: 3,
-              validator: (res) {
-                if (res.trim() == "") {
-                  return "Description is required";
-                } else {
-                  return null;
-                }
-              },
-              enabled: !isLoading,
             ),
           ].map((res) {
             return Padding(

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:appointment_app/auth/login.dart';
 import 'package:appointment_app/pages/dashboard.dart';
 import 'package:appointment_app/pages/registration/first_time_login.dart';
@@ -19,8 +21,41 @@ class _RootState extends State<Root> {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
+    FirebaseAuth.instance.onAuthStateChanged.first.then((res) async {
+      if (res == null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Login()),
+        );
+      } else {
+        HttpClient httpClient = HttpClient.of(context);
+        final snapshot = await httpClient.client.get("/onboard/status");
+        final userStatus = UserStatus.fromJson(snapshot.body);
+        Widget widget;
+        switch (userStatus.data.status) {
+          case "not-registered":
+            widget = FirstTimeLoginPage();
+            break;
+          case "pending":
+            widget = WaitingForConfirm();
+            break;
+          case "approved":
+            widget = Dashboard();
+            break;
+        }
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => widget),
+        );
+      }
+    });
   }
 
   Widget loadingScreen() {
@@ -33,36 +68,10 @@ class _RootState extends State<Root> {
 
   @override
   Widget build(BuildContext buildContext) {
-    return StreamBuilder<FirebaseUser>(
-      stream: this._stream,
-      builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
-        HttpClient httpClient = HttpClient.of(context);
-
-        if (snapshot.hasError) {
-          return Text(snapshot.error.toString());
-        }
-        print(snapshot.data);
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return loadingScreen();
-          case ConnectionState.none:
-            return Login();
-            break;
-          case ConnectionState.active:
-          case ConnectionState.done:
-            if (snapshot.hasData) {
-              return CheckIsFirstTimeLogin(
-                dashboard: Dashboard(),
-                firstTimeLogin: FirstTimeLoginPage(),
-                firebaseAuth: firebaseAuth,
-                httpClient: httpClient,
-              );
-            } else {
-              return Login();
-            }
-        }
-        return null;
-      },
+    return Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

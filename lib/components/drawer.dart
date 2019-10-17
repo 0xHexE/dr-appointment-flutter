@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:appointment_app/pages/client_list.dart';
+import 'package:appointment_app/pages/create_doctor.dart';
 import 'package:appointment_app/pages/dashboard.dart';
 import 'package:appointment_app/pages/my_account.dart';
 import 'package:appointment_app/pages/notification.dart';
@@ -44,6 +45,16 @@ class DrawerInternal extends StatelessWidget {
               );
             },
             leading: Icon(Icons.group),
+          ),
+          ListTile(
+            title: Text('Doctor'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateDoctorPage()),
+              );
+            },
+            leading: Icon(Icons.local_hospital),
           ),
           ListTile(
             title: Text('My account'),
