@@ -52,13 +52,93 @@ class _DoctorListState extends State<DoctorList> {
               return Column(
                 children: <Widget>[
                   Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        child: Text(snapshot.data.data[i].name),
-                      ),
-                      title: Text(snapshot.data.data[i].name),
-                      subtitle: Text(snapshot.data.data[i].email),
-                    ),
+                    child: Column(
+                      children: <Widget>[
+                        ListTile(
+                          leading: CircleAvatar(
+                            child: Text(snapshot.data.data[i].name),
+                          ),
+                          title: Text(snapshot.data.data[i].name),
+                          subtitle: Text(snapshot.data.data[i].email),
+                        ),
+                        ButtonTheme.bar(
+                          child: ButtonBar(
+                            children: <Widget>[
+                              FlatButton(
+                                child: Text('Show Inforamtion'),
+                                onPressed: () async {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return SimpleDialog(
+                                        title: Text('Information'),
+                                        children: <Widget>[
+                                          ListView(
+                                            shrinkWrap: true,
+                                            children: <Widget>[
+                                              Row(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    child: Icon(Icons.person),
+                                                    padding: EdgeInsets.all(20),
+                                                  ),
+                                                  Text(snapshot.data.data[i].name, textAlign: TextAlign.center),
+                                                  Divider()
+                                                ],
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    child: Icon(Icons.home),
+                                                    padding: EdgeInsets.all(20),
+                                                  ),
+                                                  Text(snapshot.data.data[i].address, textAlign: TextAlign.center),
+                                                  Divider()
+                                                ],
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    child: Icon(Icons.email),
+                                                    padding: EdgeInsets.all(20),
+                                                  ),
+                                                  Text(snapshot.data.data[i].email, textAlign: TextAlign.center),
+                                                  Divider()
+                                                ],
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    child: Icon(Icons.mobile_screen_share),
+                                                    padding: EdgeInsets.all(20),
+                                                  ),
+                                                  Text(snapshot.data.data[i].mobile, textAlign: TextAlign.center),
+                                                  Divider()
+                                                ],
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    child: Icon(Icons.date_range),
+                                                    padding: EdgeInsets.all(20),
+                                                  ),
+                                                  Text(snapshot.data.data[i].dateOfBirth, textAlign: TextAlign.center),
+                                                  Divider()
+                                                ],
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      );
+                                    }
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    )
                   ),
                 ],
               );
