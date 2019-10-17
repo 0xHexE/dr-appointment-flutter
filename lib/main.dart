@@ -39,14 +39,12 @@ class _MainAppState extends State<MainApp> {
 
 void main() async {
   ByteData loadedData;
-
   await Future.wait<void>(<Future<void>>[
     rootBundle.load('assets/2019b.tzf').then((ByteData data) {
       loadedData = data;
       print('loaded data');
     })
   ]);
-
   initializeDatabase(loadedData.buffer.asUint8List());
 
   runApp(new MainApp());
