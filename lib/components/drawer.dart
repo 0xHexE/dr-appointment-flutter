@@ -1,7 +1,8 @@
 import 'dart:async';
 
+import 'package:appointment_app/auth/login.dart';
 import 'package:appointment_app/pages/client_list.dart';
-import 'package:appointment_app/pages/create_doctor.dart';
+import 'package:appointment_app/pages/create_user.dart';
 import 'package:appointment_app/pages/dashboard.dart';
 import 'package:appointment_app/pages/my_account.dart';
 import 'package:appointment_app/pages/notification.dart';
@@ -51,7 +52,9 @@ class DrawerInternal extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CreateDoctorPage()),
+                MaterialPageRoute(
+                  builder: (context) => CreateUserPage(type: 'doctor'),
+                ),
               );
             },
             leading: Icon(Icons.local_hospital),
@@ -69,7 +72,12 @@ class DrawerInternal extends StatelessWidget {
           ListTile(
             title: Text('Logout'),
             onTap: () {
-              _firebaseAuth.signOut();
+              _firebaseAuth.signOut().then((res) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
+              });
             },
             leading: Icon(Icons.exit_to_app),
           ),

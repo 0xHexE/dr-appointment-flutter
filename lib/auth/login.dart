@@ -58,11 +58,16 @@ class _InternalLoginFormState extends State<_InternalLoginForm> {
 
   Widget build(BuildContext context) {
     return ListView(
+      padding: EdgeInsets.only(top: 56.0),
       children: <Widget>[
         Text(
           "Sign in",
+          style: Theme.of(context).textTheme.headline,
         ),
-        Text("Use your account"),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+          child: Text("Use your account"),
+        ),
         TextField(
           controller: _emailController,
           decoration: InputDecoration(
@@ -116,7 +121,16 @@ class _InternalLoginFormState extends State<_InternalLoginForm> {
             ),
           ],
         )
-      ],
+      ].map((res) {
+        return Padding(
+          child: res,
+          padding: EdgeInsets.only(
+            bottom: 8.0,
+            left: 16.0,
+            right: 16.0,
+          ),
+        );
+      }).toList(),
     );
   }
 }

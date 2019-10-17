@@ -36,24 +36,37 @@ class _RootState extends State<Root> {
         );
       } else {
         HttpClient httpClient = HttpClient.of(context);
-        final snapshot = await httpClient.client.get("/onboard/status");
-        final userStatus = UserStatus.fromJson(snapshot.body);
-        Widget widget;
-        switch (userStatus.data.status) {
-          case "not-registered":
-            widget = FirstTimeLoginPage();
-            break;
-          case "pending":
-            widget = WaitingForConfirm();
-            break;
-          case "approved":
-            widget = Dashboard();
-            break;
+        try {
+          final snapshot = await httpClient.client.get("/onboard/status");
+          final userStatus = UserStatus.fromJson(snapshot.body);
+          Widget widget;
+          switch (userStatus.data.status) {
+            case "not-registered":
+              widget = FirstTimeLoginPage();
+              break;
+            case "pending":
+              widget = WaitingForConfirm();
+              break;
+            case "approved":
+              widget = Dashboard();
+              break;
+          }
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => widget),
+          );
+        } catch (e) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                body: Text(
+                  "Error" + e.toString(),
+                ),
+              ),
+            ),
+          );
         }
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => widget),
-        );
       }
     });
   }
@@ -82,6 +95,7 @@ class CheckIsFirstTimeLogin extends StatelessWidget {
     @required this.firstTimeLogin,
     @required this.firebaseAuth,
     @required this.httpClient,
+    @required BuildContext context,
   }) {
     this.future = this.isHaveDatabase();
   }
