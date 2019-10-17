@@ -28,9 +28,12 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
     final data = _scaffold.currentState.showSnackBar(SnackBar(
       content: Text('Creating...'),
     ));
+    isLoading = true;
 
-    final response = await HttpClient.of(context).client.patch(
-          "/data/api/v1/onboard/start",
+    HttpClient.of(context)
+        .client
+        .post(
+          "/onboard/start",
           body: json.encode(
             {
               "name": _nameController.text,
@@ -39,27 +42,22 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
               "description": _descriptionController.text,
             },
           ),
-        );
-    isLoading = true;
-
-    data.close();
-
-    final decodedBody = json.decode(response.body);
-
-    if (response.statusCode != 201) {
-      _scaffold.currentState.showSnackBar(SnackBar(
-        content: Text(decodedBody['error']),
-      ));
-      return;
-    }
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (BuildContext context) => ClientInfo(
-          clientId: decodedBody['id'],
+        )
+        .then((res) {
+      data.close();
+      final decodedBody = json.decode(res.body);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (BuildContext context) => ClientInfo(
+            clientId: decodedBody['id'],
+          ),
         ),
-      ),
-    );
+      );
+    }).catchError((dynamic err) {
+      final data = _scaffold.currentState.showSnackBar(SnackBar(
+        content: Text(err.body.toString()),
+      ));
+    });
   }
 
   @override
@@ -74,6 +72,7 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffold,
       body: Form(
         key: _form,
         child: ListView(
@@ -95,6 +94,13 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
                 labelText: 'Name',
                 hintText: 'Name',
               ),
+              validator: (res) {
+                if (res.trim() == "") {
+                  return "Name is required";
+                } else {
+                  return null;
+                }
+              },
               enabled: !isLoading,
             ),
             TextFormField(
@@ -105,6 +111,13 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
                 hintText: 'Address',
               ),
               maxLines: 3,
+              validator: (res) {
+                if (res.trim() == "") {
+                  return "Address is required";
+                } else {
+                  return null;
+                }
+              },
               minLines: 3,
               enabled: !isLoading,
             ),
@@ -116,6 +129,13 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
                 hintText: 'Date of birth',
               ),
               format: format,
+              validator: (res) {
+                if (res.isAfter(DateTime.now())) {
+                  return "Enter valid date of bith";
+                } else {
+                  return null;
+                }
+              },
               enabled: !isLoading,
               onShowPicker: (context, currentValue) {
                 return showDatePicker(
@@ -135,6 +155,13 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
               ),
               maxLines: 3,
               minLines: 3,
+              validator: (res) {
+                if (res.trim() == "") {
+                  return "Description is required";
+                } else {
+                  return null;
+                }
+              },
               enabled: !isLoading,
             ),
           ].map((res) {

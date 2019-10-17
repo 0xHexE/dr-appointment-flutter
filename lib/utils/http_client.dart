@@ -66,7 +66,7 @@ class LoginInterceptor implements InterceptorContract {
   @override
   Future<RequestData> interceptRequest({RequestData data}) async {
     data.url = '$apiEndpoint${data.url}';
-    final fireAuth = await this.firebaseAuth.currentUser().catchError(() {
+    final fireAuth = await this.firebaseAuth.currentUser().catchError((e) {
       return null;
     });
 
