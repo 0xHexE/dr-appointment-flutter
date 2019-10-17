@@ -25,11 +25,26 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
   var isLoading = false;
 
   void handleSave(BuildContext context) async {
+    if (!_form.currentState.validate()) {
+      final data = _scaffold.currentState.showSnackBar(SnackBar(
+        content: Text('Please enter the form values'),
+      ));
+      return;
+    }
+
     final data = _scaffold.currentState.showSnackBar(SnackBar(
       content: Text('Creating...'),
     ));
     isLoading = true;
 
+    print(json.encode(
+      {
+        "name": _nameController.text,
+        "address": _addressController.text,
+        "dateOfBirth": _dateOfBirthController.text,
+        "description": _descriptionController.text,
+      },
+    ));
     HttpClient.of(context)
         .client
         .post(
@@ -54,7 +69,8 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
         ),
       );
     }).catchError((dynamic err) {
-      final data = _scaffold.currentState.showSnackBar(SnackBar(
+      data.close();
+      final snackError = _scaffold.currentState.showSnackBar(SnackBar(
         content: Text(err.body.toString()),
       ));
     });
@@ -130,7 +146,7 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
               ),
               format: format,
               validator: (res) {
-                if (res.isAfter(DateTime.now())) {
+                if (res == null || res.isAfter(DateTime.now())) {
                   return "Enter valid date of bith";
                 } else {
                   return null;
