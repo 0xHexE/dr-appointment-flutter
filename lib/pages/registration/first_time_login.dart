@@ -29,13 +29,17 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
       content: Text('Creating...'),
     ));
 
-    final response = await HttpClient.of(context).client.patch("/clients/create",
-        body: json.encode({
-          "name": _nameController.text,
-          "address": _addressController.text,
-          "dateOfBirth": _dateOfBirthController.text,
-          "description": _descriptionController.text
-        }));
+    final response = await HttpClient.of(context).client.patch(
+          "/data/api/v1/onboard/start",
+          body: json.encode(
+            {
+              "name": _nameController.text,
+              "address": _addressController.text,
+              "dateOfBirth": _dateOfBirthController.text,
+              "description": _descriptionController.text,
+            },
+          ),
+        );
     isLoading = true;
 
     data.close();
@@ -70,14 +74,20 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('First Time Login'),
-      ),
       body: Form(
         key: _form,
         child: ListView(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 36.0),
           children: <Widget>[
+            Text(
+              "Fill out your information",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.title,
+            ),
+            Text(
+              "to continue with us",
+              textAlign: TextAlign.center,
+            ),
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
@@ -138,7 +148,7 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => handleSave(context),
         isExtended: true,
-        child: Icon(Icons.save),
+        child: Icon(Icons.navigate_next),
       ),
     );
   }

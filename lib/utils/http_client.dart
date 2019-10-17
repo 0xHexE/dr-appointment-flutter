@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 
-final String apiEndpoint = "http://10.0.2.2:3000/data/v1";
+final String apiEndpoint = "http://10.0.2.2:3000/data/api/v1";
 
 class HttpClient extends InheritedWidget {
   HttpClient({Key key, Widget child, this.firebaseAuth})
@@ -49,6 +49,7 @@ class LoginInterceptor implements InterceptorContract {
       if (onData != null) {
         onData.getIdToken().then((onValue) {
           this.currentToken = onValue.token;
+          print(this.currentToken);
         });
       } else {
         this.currentToken = null;
@@ -65,6 +66,14 @@ class LoginInterceptor implements InterceptorContract {
   @override
   Future<RequestData> interceptRequest({RequestData data}) async {
     data.url = '$apiEndpoint${data.url}';
+    final fireAuth = await this.firebaseAuth.currentUser().catchError(() {
+      return null;
+    });
+
+    if (currentToken == null) {
+      currentToken = (await fireAuth.getIdToken()).token;
+    }
+
     if (currentToken != null) {
       data.headers['Authorization'] = 'Bearer $currentToken';
     }
@@ -75,6 +84,9 @@ class LoginInterceptor implements InterceptorContract {
 
   @override
   Future<ResponseData> interceptResponse({ResponseData data}) async {
+    if (data.statusCode < 200 || data.statusCode > 299) {
+      throw data;
+    }
     return data;
   }
 }

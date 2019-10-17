@@ -26,6 +26,7 @@ class NextAppointmentData extends StatelessWidget {
                     right: 12.0,
                   ),
                   child: Card(
+                    elevation: 4.0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
@@ -40,6 +41,7 @@ class NextAppointmentData extends StatelessWidget {
                         ),
                         ButtonTheme.bar(
                           child: ButtonBar(
+                            alignment: MainAxisAlignment.start,
                             children: <Widget>[
                               FlatButton(
                                 child: Text("VIEW"),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -51,4 +52,53 @@ class Auth implements BaseAuth {
     FirebaseUser user = await _firebaseAuth.currentUser();
     return user.isEmailVerified;
   }
+}
+
+class UserStatus {
+  Data data;
+
+  UserStatus({
+    this.data,
+  });
+
+  factory UserStatus.fromJson(String str) =>
+      UserStatus.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory UserStatus.fromMap(Map<String, dynamic> json) => UserStatus(
+        data: json["data"] == null ? null : Data.fromMap(json["data"]),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "data": data == null ? null : data.toMap(),
+      };
+}
+
+class Data {
+  String status;
+  String userId;
+  String role;
+
+  Data({
+    this.status,
+    this.userId,
+    this.role,
+  });
+
+  factory Data.fromJson(String str) => Data.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Data.fromMap(Map<String, dynamic> json) => Data(
+        status: json["status"] == null ? null : json["status"],
+        userId: json["userId"] == null ? null : json["userId"],
+        role: json["role"] == null ? null : json["role"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "status": status == null ? null : status,
+        "userId": userId == null ? null : userId,
+        "role": role == null ? null : role,
+      };
 }
