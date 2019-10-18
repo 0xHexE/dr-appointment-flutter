@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:appointment_app/auth/login.dart';
 import 'package:appointment_app/pages/client_list.dart';
-import 'package:appointment_app/pages/create_user.dart';
 import 'package:appointment_app/pages/dashboard.dart';
+import 'package:appointment_app/pages/doctor_list.dart';
 import 'package:appointment_app/pages/my_account.dart';
 import 'package:appointment_app/pages/notification.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,7 +53,7 @@ class DrawerInternal extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CreateUserPage(type: 'doctor'),
+                  builder: (context) => DoctorList(),
                 ),
               );
             },

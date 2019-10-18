@@ -36,14 +36,11 @@ class _ClientListState extends State<ClientList> {
             return ListView.builder(
               itemCount: snapshot.data.data.length,
               itemBuilder: (context, position) {
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      position.toString(),
-                      style: TextStyle(fontSize: 22.0),
-                    ),
-                  ),
+                return ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text(snapshot.data.data[position].name),
+                  subtitle:
+                      Text(snapshot.data.data[position].phoneNumber ?? ''),
                 );
               },
             );

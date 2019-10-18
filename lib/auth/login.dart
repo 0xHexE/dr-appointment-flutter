@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../root.dart';
 import 'forget_password.dart';
 
 class Login extends StatefulWidget {
@@ -31,7 +32,10 @@ class _InternalLoginFormState extends State<_InternalLoginForm> {
       _passwordController = TextEditingController();
 
   void _callbackSuccessLogin(AuthResult authResult) {
-    // Blank due to the stream
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Root()),
+    );
   }
 
   void _callbackFailLogin(PlatformException error, BuildContext context) {

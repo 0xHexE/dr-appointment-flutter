@@ -1,4 +1,5 @@
 import 'package:appointment_app/services/notification_service.dart';
+import 'package:appointment_app/utils/http_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,7 @@ class _NotificationPageState extends State<NotificationPage> {
           backgroundColor: Colors.white,
         ),
         body: FutureBuilder(
-          future: getNotifications(),
+          future: getNotifications(HttpClient.of(context)),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.data == null && !snapshot.hasError) {
@@ -39,9 +40,11 @@ class _NotificationPageState extends State<NotificationPage> {
               if (snapshot.hasError) {
                 return AlertDialog(
                   title: Text("Error"),
-                  content: Text("Check Internet Connection" +
-                      " " +
-                      snapshot.error.toString()),
+                  content: Text(
+                    "Check Internet Connection" +
+                        " " +
+                        snapshot.error.toString(),
+                  ),
                 );
               }
               return new Center(

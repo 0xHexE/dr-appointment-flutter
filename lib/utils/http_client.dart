@@ -70,6 +70,8 @@ class LoginInterceptor implements InterceptorContract {
       return null;
     });
 
+    print(data.body);
+
     if (currentToken == null) {
       currentToken = (await fireAuth.getIdToken()).token;
     }
@@ -85,6 +87,7 @@ class LoginInterceptor implements InterceptorContract {
   @override
   Future<ResponseData> interceptResponse({ResponseData data}) async {
     if (data.statusCode < 200 || data.statusCode > 299) {
+      print(data.body);
       throw data;
     }
     return data;
