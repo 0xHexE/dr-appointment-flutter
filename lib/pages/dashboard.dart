@@ -5,6 +5,7 @@ import 'package:appointment_app/model/dashboard_model.dart';
 import 'package:appointment_app/pages/calender.dart';
 import 'package:appointment_app/pages/client_list.dart';
 import 'package:appointment_app/pages/new_appointment.dart';
+import 'package:appointment_app/pages/new_calender.dart';
 import 'package:appointment_app/services/dashboard_service.dart';
 import 'package:flutter/material.dart';
 
@@ -98,7 +99,7 @@ class _DashboardState extends State<Dashboard> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Calendar()),
+                  MaterialPageRoute(builder: (context) => NewCalendar()),
                 );
               },
             ),
