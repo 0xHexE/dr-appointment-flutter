@@ -32,8 +32,8 @@ class _DoctorListState extends State<DoctorList> {
         ),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return SnackBar(
-              content: Text("Error: ${snapshot.error}"),
+            return Text(
+              "Error: ${snapshot.error}",
             );
           }
 
