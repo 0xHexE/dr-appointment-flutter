@@ -70,88 +70,89 @@ class _DoctorListState extends State<DoctorList> {
                                         return SimpleDialog(
                                           title: Text('Information'),
                                           children: <Widget>[
-                                            ListView(
-                                              shrinkWrap: true,
-                                              children: <Widget>[
-                                                Row(
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      child: Icon(Icons.person),
-                                                      padding:
-                                                          EdgeInsets.all(20),
-                                                    ),
-                                                    Text(
-                                                        snapshot
-                                                            .data.data[i].name,
-                                                        textAlign:
-                                                            TextAlign.center),
-                                                    Divider()
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      child: Icon(Icons.home),
-                                                      padding:
-                                                          EdgeInsets.all(20),
-                                                    ),
-                                                    Text(
-                                                        snapshot.data.data[i]
-                                                            .address,
-                                                        textAlign:
-                                                            TextAlign.center),
-                                                    Divider()
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      child: Icon(Icons.email),
-                                                      padding:
-                                                          EdgeInsets.all(20),
-                                                    ),
-                                                    Text(
-                                                        snapshot
-                                                            .data.data[i].email,
-                                                        textAlign:
-                                                            TextAlign.center),
-                                                    Divider()
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      child: Icon(Icons
-                                                          .mobile_screen_share),
-                                                      padding:
-                                                          EdgeInsets.all(20),
-                                                    ),
-                                                    Text(
-                                                        snapshot.data.data[i]
-                                                                .mobile ??
-                                                            'Not available',
-                                                        textAlign:
-                                                            TextAlign.center),
-                                                    Divider()
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      child: Icon(
-                                                          Icons.date_range),
-                                                      padding:
-                                                          EdgeInsets.all(20),
-                                                    ),
-                                                    Text(
-                                                        snapshot.data.data[i]
-                                                            .dateOfBirth,
-                                                        textAlign:
-                                                            TextAlign.center),
-                                                    Divider()
-                                                  ],
-                                                )
-                                              ],
+                                            SingleChildScrollView(
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Row(
+                                                    children: <Widget>[
+                                                      Padding(
+                                                        child: Icon(Icons.person),
+                                                        padding:
+                                                        EdgeInsets.all(20),
+                                                      ),
+                                                      Text(
+                                                          snapshot
+                                                              .data.data[i].name,
+                                                          textAlign:
+                                                          TextAlign.center),
+                                                      Divider()
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: <Widget>[
+                                                      Padding(
+                                                        child: Icon(Icons.home),
+                                                        padding:
+                                                        EdgeInsets.all(20),
+                                                      ),
+                                                      Text(
+                                                          snapshot.data.data[i]
+                                                              .address,
+                                                          textAlign:
+                                                          TextAlign.center),
+                                                      Divider()
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: <Widget>[
+                                                      Padding(
+                                                        child: Icon(Icons.email),
+                                                        padding:
+                                                        EdgeInsets.all(20),
+                                                      ),
+                                                      Text(
+                                                          snapshot
+                                                              .data.data[i].email,
+                                                          textAlign:
+                                                          TextAlign.center),
+                                                      Divider()
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: <Widget>[
+                                                      Padding(
+                                                        child: Icon(Icons
+                                                            .mobile_screen_share),
+                                                        padding:
+                                                        EdgeInsets.all(20),
+                                                      ),
+                                                      Text(
+                                                          snapshot.data.data[i]
+                                                              .mobile ??
+                                                              'Not available',
+                                                          textAlign:
+                                                          TextAlign.center),
+                                                      Divider()
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: <Widget>[
+                                                      Padding(
+                                                        child: Icon(
+                                                            Icons.date_range),
+                                                        padding:
+                                                        EdgeInsets.all(20),
+                                                      ),
+                                                      Text(
+                                                          snapshot.data.data[i]
+                                                              .dateOfBirth,
+                                                          textAlign:
+                                                          TextAlign.center),
+                                                      Divider()
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
                                             )
                                           ],
                                         );
