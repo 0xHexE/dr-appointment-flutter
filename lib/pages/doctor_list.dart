@@ -128,7 +128,8 @@ class _DoctorListState extends State<DoctorList> {
                                                     ),
                                                     Text(
                                                         snapshot.data.data[i]
-                                                            .mobile,
+                                                                .mobile ??
+                                                            'Not available',
                                                         textAlign:
                                                             TextAlign.center),
                                                     Divider()

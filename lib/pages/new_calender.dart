@@ -1,13 +1,10 @@
-
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:appointment_app/model/new_calendar_model.dart';
 import 'package:appointment_app/services/new_calender_service.dart';
+import 'package:appointment_app/utils/http_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:http/http.dart' as http;
 
 class NewCalendar extends StatefulWidget {
   @override
@@ -15,7 +12,8 @@ class NewCalendar extends StatefulWidget {
 }
 
 class _NewCalendarState extends State<NewCalendar> {
-  final StreamController _streamController = StreamController<NewCalendarModel>();
+  final StreamController _streamController =
+      StreamController<NewCalendarModel>();
 
   @override
   void dispose() {
@@ -46,84 +44,86 @@ class _NewCalendarState extends State<NewCalendar> {
         ],
       ),
       body: FutureBuilder(
-        future: getAppointments(),
+        future: getAppointments(HttpClient.of(context)),
         builder: (context, snapshot) {
-
           if (snapshot.hasError) {
             return Text('error');
           }
 
           if (!snapshot.hasData) {
-            return Text('No data ' +  snapshot.data.toString());
+            return Text('No data ' + snapshot.data.toString());
           }
 
-          return  ListView.builder(
+          return ListView.builder(
             itemCount: snapshot.data.data.length,
             itemBuilder: (context, i) {
               return Card(
-                child: Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: CircleAvatar(
-                        child: Text(snapshot.data.data[i].clientName),
-                      ),
-                      title: Text(snapshot.data.data[i].clientName),
-                      subtitle: Text(snapshot.data.data[i].issue),
+                  child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: CircleAvatar(
+                      child: Text(snapshot.data.data[i].clientName),
                     ),
-                    ButtonTheme.bar(
-                      child: ButtonBar(
-                        children: <Widget>[
-                          FlatButton(
-                            child: Text('Show Appointment'),
-                            onPressed: () async {
-                              await showDialog(
+                    title: Text(snapshot.data.data[i].clientName),
+                    subtitle: Text(snapshot.data.data[i].issue),
+                  ),
+                  ButtonTheme.bar(
+                    child: ButtonBar(
+                      children: <Widget>[
+                        FlatButton(
+                          child: Text('Show Appointment'),
+                          onPressed: () async {
+                            await showDialog(
                                 context: context,
                                 builder: (context) {
                                   return SimpleDialog(
                                     children: <Widget>[
-                                    ListView(
-                                    shrinkWrap: true,
-                                    children: <Widget>[
-                                      Row(
+                                      ListView(
+                                        shrinkWrap: true,
                                         children: <Widget>[
-                                          Padding(
-                                            child: Icon(Icons.person),
-                                            padding: EdgeInsets.all(20),
+                                          Row(
+                                            children: <Widget>[
+                                              Padding(
+                                                child: Icon(Icons.person),
+                                                padding: EdgeInsets.all(20),
+                                              ),
+                                              Text(snapshot
+                                                  .data.data[i].clientName)
+                                            ],
                                           ),
-                                          Text(snapshot.data.data[i].clientName)
-                                        ],
-                                      ),Row(
-                                        children: <Widget>[
-                                          Padding(
-                                            child: Icon(Icons.local_hospital),
-                                            padding: EdgeInsets.all(20),
+                                          Row(
+                                            children: <Widget>[
+                                              Padding(
+                                                child:
+                                                    Icon(Icons.local_hospital),
+                                                padding: EdgeInsets.all(20),
+                                              ),
+                                              Text(snapshot
+                                                  .data.data[i].doctorName)
+                                            ],
                                           ),
-                                          Text(snapshot.data.data[i].doctorName)
-                                        ],
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Padding(
-                                            child: Icon(Icons.report_problem),
-                                            padding: EdgeInsets.all(20),
-                                          ),
-                                          Text(snapshot.data.data[i].issue)
+                                          Row(
+                                            children: <Widget>[
+                                              Padding(
+                                                child:
+                                                    Icon(Icons.report_problem),
+                                                padding: EdgeInsets.all(20),
+                                              ),
+                                              Text(snapshot.data.data[i].issue)
+                                            ],
+                                          )
                                         ],
                                       )
                                     ],
-                                  )
-                                    ],
                                   );
-                                }
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                )
-              );
+                                });
+                          },
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ));
             },
           );
         },
