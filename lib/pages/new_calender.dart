@@ -32,7 +32,9 @@ class _NewCalendarState extends State<NewCalendar> {
   @override
   void initState() {
     super.initState();
-    updateAppointment(DateTime.now());
+    Future.delayed(Duration(milliseconds: 100), () {
+      updateAppointment(DateTime.now());
+    });
   }
 
   @override
