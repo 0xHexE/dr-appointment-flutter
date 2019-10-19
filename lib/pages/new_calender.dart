@@ -5,6 +5,7 @@ import 'package:appointment_app/services/new_calender_service.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewCalendar extends StatefulWidget {
   @override
@@ -12,21 +13,39 @@ class NewCalendar extends StatefulWidget {
 }
 
 class _NewCalendarState extends State<NewCalendar> {
-  final StreamController _streamController =
-      StreamController<NewCalendarModel>();
+
+  final StreamController _streamController = StreamController<NewCalendarModel>();
+
+  final _timeFormat = DateFormat.jm();
+
+  void updateAppointment(DateTime date) async {
+
+    _streamController.add(null);
+
+    final jsonData = await getAppointmentByDate(HttpClient.of(context), date);
+    if (jsonData == null) {
+      _streamController.addError('Error Getting Data');
+    }
+    _streamController.add(jsonData);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    updateAppointment(DateTime.now());
+  }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _streamController.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        title: Text('Appointments'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -37,21 +56,33 @@ class _NewCalendarState extends State<NewCalendar> {
           IconButton(
             icon: Icon(Icons.calendar_today),
             onPressed: () async {
-              setState(() {});
-              return null;
+
+              final date = await showDatePicker(
+                context: context,
+                firstDate: DateTime(1900),
+                initialDate: DateTime.now(),
+                lastDate: DateTime(2100),
+              );
+
+              updateAppointment(date);
             },
           )
         ],
       ),
-      body: FutureBuilder(
-        future: getAppointments(HttpClient.of(context)),
+      body: StreamBuilder(
+        stream: _streamController.stream,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('error');
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text(snapshot.error.toString()),
+            );
           }
 
           if (!snapshot.hasData) {
-            return Text('No data ' + snapshot.data.toString());
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
 
           return ListView.builder(
@@ -61,11 +92,26 @@ class _NewCalendarState extends State<NewCalendar> {
                   child: Column(
                 children: <Widget>[
                   ListTile(
-                    leading: CircleAvatar(
+                    leading: Column(
+                      verticalDirection: VerticalDirection.up,
+                      children: <Widget>[
+                        Text(
+                            _timeFormat.format(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    int.parse(snapshot.data.data[i].dateInstance)
+                                )
+                            ).toString()
+                        ),
+                      ],
+                  ),
+                    title: Padding(
                       child: Text(snapshot.data.data[i].clientName),
+                      padding: EdgeInsets.fromLTRB(10, 20, 0, 0)
                     ),
-                    title: Text(snapshot.data.data[i].clientName),
-                    subtitle: Text(snapshot.data.data[i].issue),
+                    subtitle: Padding(
+                      child: Text(snapshot.data.data[i].issue),
+                      padding: EdgeInsets.fromLTRB(10, 20, 0, 0)
+                    ),
                   ),
                   ButtonTheme.bar(
                     child: ButtonBar(
@@ -78,41 +124,53 @@ class _NewCalendarState extends State<NewCalendar> {
                                 builder: (context) {
                                   return SimpleDialog(
                                     children: <Widget>[
-                                      ListView(
-                                        shrinkWrap: true,
-                                        children: <Widget>[
-                                          Row(
-                                            children: <Widget>[
-                                              Padding(
-                                                child: Icon(Icons.person),
-                                                padding: EdgeInsets.all(20),
-                                              ),
-                                              Text(snapshot
-                                                  .data.data[i].clientName)
-                                            ],
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Padding(
-                                                child:
-                                                    Icon(Icons.local_hospital),
-                                                padding: EdgeInsets.all(20),
-                                              ),
-                                              Text(snapshot
-                                                  .data.data[i].doctorName)
-                                            ],
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Padding(
-                                                child:
-                                                    Icon(Icons.report_problem),
-                                                padding: EdgeInsets.all(20),
-                                              ),
-                                              Text(snapshot.data.data[i].issue)
-                                            ],
-                                          )
-                                        ],
+                                      SingleChildScrollView(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Row(
+                                              children: <Widget>[
+                                                Padding(
+                                                  child: Icon(Icons.person),
+                                                  padding: EdgeInsets.all(20),
+                                                ),
+                                                Text(snapshot
+                                                    .data.data[i].clientName)
+                                              ],
+                                            ),
+                                            Row(
+                                              children: <Widget>[
+                                                Padding(
+                                                  child:
+                                                  Icon(Icons.local_hospital),
+                                                  padding: EdgeInsets.all(20),
+                                                ),
+                                                Text(snapshot
+                                                    .data.data[i].doctorName)
+                                              ],
+                                            ),
+                                            Row(
+                                              children: <Widget>[
+                                                Padding(
+                                                  child:
+                                                  Icon(Icons.description),
+                                                  padding: EdgeInsets.all(20),
+                                                ),
+                                                Text(snapshot
+                                                    .data.data[i].description)
+                                              ],
+                                            ),
+                                            Row(
+                                              children: <Widget>[
+                                                Padding(
+                                                  child:
+                                                  Icon(Icons.report_problem),
+                                                  padding: EdgeInsets.all(20),
+                                                ),
+                                                Text(snapshot.data.data[i].issue)
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       )
                                     ],
                                   );

@@ -5,25 +5,28 @@ import 'package:appointment_app/utils/http_client.dart';
 
 import 'package:http/http.dart' as http;
 
-final StreamController stateController = StreamController<NewCalendarModel>();
+Future<NewCalendarModel> getAppointmentByDate(
+    HttpClient httpClient,
+    DateTime date) async {
 
-Future<NewCalendarModel> getAppointmentByDate(HttpClient httpClient, DateTime date) async {
-
-  //final epochDate = date.millisecondsSinceEpoch;
-  // final response = await httpClient.client.get("/appointments");
-  final response = await http.get('http://192.168.1.4:4000/appointments');
-
-  if (response.statusCode != 200) {
-    stateController.addError('Failed to get data');
+  if (httpClient == null) {
+    return null;
   }
 
-  stateController.add(
-      NewCalendarModel.fromJson(response.body)
-  );
+  final unixDate = date.millisecondsSinceEpoch == null
+      ? null : date.millisecondsSinceEpoch;
 
-  var a = NewCalendarModel.fromJson(response.body);
+  final response = await httpClient.client.get("/appointments/$unixDate");
+
+  // final response = await http.get('http://www.mocky.io/v2/5daac2863100002d00becd9e');
+  // uncomment it if want to test with dummy data
+
+
+  if (response.statusCode != 200) {
+    return null;
+  }
+
   return NewCalendarModel.fromJson(response.body);
-
 }
 
 Future<NewCalendarModel> getAppointments(HttpClient httpClient) async {
@@ -33,5 +36,5 @@ Future<NewCalendarModel> getAppointments(HttpClient httpClient) async {
     return null;
   }
 
-  return NewCalendarModel.fromJson(response.body);
+  return NewCalendarModel.fromJson(response.body) ;
 }
