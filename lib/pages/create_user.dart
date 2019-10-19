@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:appointment_app/model/client_list_model.dart';
+import 'package:appointment_app/services/client_list_service.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +21,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
   _CreateUserPageState({@required this.type}) {
     print(this.type);
   }
+
   final String type;
   final format = DateFormat("dd-MM-yyyy");
   final _form = GlobalKey<FormState>();
@@ -51,20 +54,24 @@ class _CreateUserPageState extends State<CreateUserPage> {
     final dateOfBirth = DateTime.utc(int.parse(dateArray[2]),
         int.parse(dateArray[1]), int.parse(dateArray[0]));
 
+    final form = {
+      "name": _nameController.text,
+      "address": _addressController.text,
+      "dateOfBirth": dateOfBirth.millisecondsSinceEpoch,
+      "mobile": _mobileNumberController.text,
+      "email": _emailController.text,
+      "type": type
+    };
+
+    if (clientUid == null) {
+      form["doctor"] = clientUid;
+    }
+
     HttpClient.of(context)
         .client
         .post(
           "/admin/add-user",
-          body: json.encode(
-            {
-              "name": _nameController.text,
-              "address": _addressController.text,
-              "dateOfBirth": dateOfBirth.millisecondsSinceEpoch,
-              "mobile": _mobileNumberController.text,
-              "email": _emailController.text,
-              "type": type
-            },
-          ),
+          body: json.encode(form),
         )
         .then((res) {
       data.close();
@@ -81,6 +88,8 @@ class _CreateUserPageState extends State<CreateUserPage> {
     });
   }
 
+  String clientUid;
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -95,20 +104,14 @@ class _CreateUserPageState extends State<CreateUserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffold,
+      appBar: AppBar(
+        title: Text("Your user"),
+      ),
       body: Form(
         key: _form,
         child: ListView(
           padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 36.0),
           children: <Widget>[
-            Text(
-              "Create new user",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.title,
-            ),
-            Text(
-              "Fill out the form",
-              textAlign: TextAlign.center,
-            ),
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
@@ -197,6 +200,41 @@ class _CreateUserPageState extends State<CreateUserPage> {
                 );
               },
             ),
+            type != 'client'
+                ? Container()
+                : FutureBuilder(
+                    future: getDoctors(HttpClient.of(context)),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<Clients> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          return Text(snapshot.error.toString());
+                        }
+                        return DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                            filled: true,
+                            labelText: 'Doctor',
+                          ),
+                          items: snapshot.data.data.map((dynamic value) {
+                            return DropdownMenuItem<String>(
+                              value: value.uid,
+                              child: new Text(value.name),
+                            );
+                          }).toList(),
+                          value: clientUid,
+                          onChanged: (data) {
+                            setState(() {
+                              clientUid = data;
+                            });
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
           ].map((res) {
             return Padding(
               child: res,

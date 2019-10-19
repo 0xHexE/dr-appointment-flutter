@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 
-final String apiEndpoint = "https://kle.clients.f4erp.com/data/api/v1";
+final String apiEndpoint = "http://10.0.2.2:3000/data/api/v1";
 
 class HttpClient extends InheritedWidget {
   HttpClient({Key key, Widget child, this.firebaseAuth})
@@ -49,7 +49,6 @@ class LoginInterceptor implements InterceptorContract {
       if (onData != null) {
         onData.getIdToken().then((onValue) {
           this.currentToken = onValue.token;
-          print(this.currentToken);
         });
       } else {
         this.currentToken = null;
@@ -69,8 +68,6 @@ class LoginInterceptor implements InterceptorContract {
     final fireAuth = await this.firebaseAuth.currentUser().catchError((e) {
       return null;
     });
-
-    print(data.body);
 
     if (currentToken == null) {
       currentToken = (await fireAuth.getIdToken()).token;
