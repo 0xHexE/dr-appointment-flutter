@@ -25,7 +25,7 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
 
   var isLoading = false;
 
-  void handleSave(BuildContext context) async {
+  void _handleSave(BuildContext context) async {
     if (!_form.currentState.validate()) {
       final data = _scaffold.currentState.showSnackBar(SnackBar(
         content: Text('Please enter the form values'),
@@ -211,7 +211,7 @@ class _FirstTimeLoginPageState extends State<FirstTimeLoginPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => handleSave(context),
+        onPressed: () => _handleSave(context),
         isExtended: true,
         child: Icon(Icons.navigate_next),
       ),

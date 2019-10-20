@@ -1,8 +1,8 @@
 // import 'package:appointment_app/calendar.dart';
 import 'package:appointment_app/components/dashboard/chart.dart';
 import 'package:appointment_app/components/dashboard/next_appoitment.dart';
+import 'package:appointment_app/components/pending_clients_list.dart';
 import 'package:appointment_app/model/dashboard_model.dart';
-import 'package:appointment_app/pages/calender.dart';
 import 'package:appointment_app/pages/client_list.dart';
 import 'package:appointment_app/pages/new_appointment.dart';
 import 'package:appointment_app/pages/new_calender.dart';
@@ -34,11 +34,12 @@ class _DashboardState extends State<Dashboard> {
                 switch (res.chartType) {
                   case "gauge":
                     return SizedBox(
-                        height: 340.0,
-                        child: GaugeChart(
-                          GaugeChart.fromDashboardData(res.data),
-                          animate: true,
-                        ));
+                      height: 240.0,
+                      child: GaugeChart(
+                        GaugeChart.fromDashboardData(res.data),
+                        animate: true,
+                      ),
+                    );
                   default:
                     return Text("Chart is not supported");
                 }
@@ -51,11 +52,6 @@ class _DashboardState extends State<Dashboard> {
               return ListView(
                 children: [
                   ...data,
-                  Text(
-                    "Total appointments of today",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.caption,
-                  ),
                   Padding(
                     padding: EdgeInsets.only(
                       top: 12.0,
@@ -68,7 +64,16 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                   Divider(),
-                  NextAppointmentData(),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text("Today's appointment"),
+                  ),
+                  ThisDayAppointment(),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text("Pending"),
+                  ),
+                  PendingClientsList(),
                 ],
               );
             } else {

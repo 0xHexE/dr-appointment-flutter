@@ -124,7 +124,6 @@ class CheckIsFirstTimeLogin extends StatelessWidget {
             );
           }
           final userStatus = UserStatus.fromJson(snapshot.data.body);
-          print(snapshot.data.body);
           switch (userStatus.data.status) {
             case "not-registered":
               return FirstTimeLoginPage();

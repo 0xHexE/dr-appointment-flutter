@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:appointment_app/model/new_calendar_model.dart';
+import 'package:appointment_app/pages/appointment_info.dart';
 import 'package:appointment_app/services/new_calender_service.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,13 +14,12 @@ class NewCalendar extends StatefulWidget {
 }
 
 class _NewCalendarState extends State<NewCalendar> {
-
-  final StreamController _streamController = StreamController<NewCalendarModel>();
+  final StreamController _streamController =
+      StreamController<NewCalendarModel>();
 
   final _timeFormat = DateFormat.jm();
 
   void updateAppointment(DateTime date) async {
-
     _streamController.add(null);
 
     final jsonData = await getAppointmentByDate(HttpClient.of(context), date);
@@ -58,14 +58,12 @@ class _NewCalendarState extends State<NewCalendar> {
           IconButton(
             icon: Icon(Icons.calendar_today),
             onPressed: () async {
-
               final date = await showDatePicker(
                 context: context,
                 firstDate: DateTime(1900),
                 initialDate: DateTime.now(),
                 lastDate: DateTime(2100),
               );
-
               updateAppointment(date);
             },
           )
@@ -90,100 +88,24 @@ class _NewCalendarState extends State<NewCalendar> {
           return ListView.builder(
             itemCount: snapshot.data.data.length,
             itemBuilder: (context, i) {
-              return Card(
-                  child: Column(
-                children: <Widget>[
-                  ListTile(
-                    leading: Column(
-                      verticalDirection: VerticalDirection.up,
-                      children: <Widget>[
-                        Text(
-                            _timeFormat.format(
-                                DateTime.fromMillisecondsSinceEpoch(
-                                    int.parse(snapshot.data.data[i].dateInstance)
-                                )
-                            ).toString()
-                        ),
-                      ],
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.black54,
+                  child: Icon(
+                    Icons.calendar_today,
                   ),
-                    title: Padding(
-                      child: Text(snapshot.data.data[i].clientName),
-                      padding: EdgeInsets.fromLTRB(10, 20, 0, 0)
+                ),
+                onTap: () async {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AppointmentInfo(),
                     ),
-                    subtitle: Padding(
-                      child: Text(snapshot.data.data[i].issue),
-                      padding: EdgeInsets.fromLTRB(10, 20, 0, 0)
-                    ),
-                  ),
-                  ButtonTheme.bar(
-                    child: ButtonBar(
-                      children: <Widget>[
-                        FlatButton(
-                          child: Text('Show Appointment'),
-                          onPressed: () async {
-                            await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return SimpleDialog(
-                                    children: <Widget>[
-                                      SingleChildScrollView(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Row(
-                                              children: <Widget>[
-                                                Padding(
-                                                  child: Icon(Icons.person),
-                                                  padding: EdgeInsets.all(20),
-                                                ),
-                                                Text(snapshot
-                                                    .data.data[i].clientName)
-                                              ],
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                Padding(
-                                                  child:
-                                                  Icon(Icons.local_hospital),
-                                                  padding: EdgeInsets.all(20),
-                                                ),
-                                                Text(snapshot
-                                                    .data.data[i].doctorName)
-                                              ],
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                Padding(
-                                                  child:
-                                                  Icon(Icons.description),
-                                                  padding: EdgeInsets.all(20),
-                                                ),
-                                                Text(snapshot
-                                                    .data.data[i].description)
-                                              ],
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                Padding(
-                                                  child:
-                                                  Icon(Icons.report_problem),
-                                                  padding: EdgeInsets.all(20),
-                                                ),
-                                                Text(snapshot.data.data[i].issue)
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                });
-                          },
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ));
+                  );
+                },
+                title: Text(snapshot.data.data[i].clientName),
+                subtitle: Text(snapshot.data.data[i].issue),
+              );
             },
           );
         },
