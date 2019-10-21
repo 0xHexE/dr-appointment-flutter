@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LoginPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: <Widget>[
                     Container(
                         width: ScreenUtil.getInstance().setWidth(200),
-                        height: ScreenUtil.getInstance().setHeight(230),
+                        height: ScreenUtil.getInstance().setHeight(200),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: LinearGradient(
@@ -38,14 +38,14 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             )
                         ),
-                        child: Icon(Icons.date_range,
+                        child: Icon(Icons.person_add,
                           size: ScreenUtil.getInstance().setSp(120),
                           color: Colors.white,
                         )
                     ),
                     Container(
                       width: ScreenUtil.getInstance().setWidth(double.infinity),
-                      height: ScreenUtil.getInstance().setHeight(900),
+                      height: ScreenUtil.getInstance().setHeight(1000),
 
                       decoration: BoxDecoration(
                           color: Colors.white,
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.only(bottom: ScreenUtil.getInstance().setSp(40)),
-                            child: Text('Login',
+                            child: Text('SignUp',
                                 style: TextStyle(
                                     fontFamily: "Popins-Bold",
                                     fontSize: ScreenUtil.getInstance().setSp(60),
@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                           Text('Email',
                             style: TextStyle(
                                 fontFamily: "Popins-Medium",
-                                fontSize: ScreenUtil.getInstance().setSp(44)
+                                fontSize: ScreenUtil.getInstance().setSp(40)
                             ),
                           ),
                           TextField(
@@ -96,10 +96,23 @@ class _LoginPageState extends State<LoginPage> {
                           TextField(
                             obscureText: true,
                             decoration: InputDecoration(
-                                hintText: "Password",
+                                hintText: "Enter Password",
                                 hintStyle: TextStyle(color: Colors.grey, fontSize: 15)
                             ),
                           ),
+                          Text('Re-Enter Password',
+                            style: TextStyle(
+                                fontFamily: "Popins-Medium",
+                                fontSize: ScreenUtil.getInstance().setSp(40)
+                            ),
+                          ),
+                          TextField(
+                            obscureText: true,
+                            decoration: InputDecoration(
+                                hintText: "Re-Enter Password",
+                                hintStyle: TextStyle(color: Colors.grey, fontSize: 15)
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -123,15 +136,14 @@ class _LoginPageState extends State<LoginPage> {
 
                         child: InkWell(
                           onTap: () {
-                            print("Tapped on Login");;
+                            print("Tapped on signin");;
                           },
                           child: Center(
-                            child: Text("Login",
+                            child: Text("Sign In",
                               style: TextStyle(
                                   fontFamily: "Popins-Medium",
                                   fontSize: ScreenUtil.getInstance().setSp(50),
                                   fontWeight: FontWeight.w900,
-                                  letterSpacing: 1,
                                   color: Colors.white
                               ),
                             ),
@@ -153,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.all(ScreenUtil.getInstance().setSp(20)),
-                              child: Text('First time here ?',
+                              child: Text('Already have Account ?',
                                 style: TextStyle(
                                     fontFamily: "Popins-Medium",
                                     fontSize: ScreenUtil.getInstance().setSp(43),
@@ -164,11 +176,11 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             InkWell(
                               onTap: () {
-                                print("Tapped on Sign Up");
+                                print("Tapped on Already have account");
                               },
                               child: Padding(
                                 padding: EdgeInsets.all(ScreenUtil.getInstance().setSp(20)),
-                                child: Text('Sign Up',
+                                child: Text('Log In',
                                   style: TextStyle(
                                       fontFamily: "Popins-Medium",
                                       fontSize: ScreenUtil.getInstance().setSp(43),
