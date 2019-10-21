@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:after_layout/after_layout.dart';
 import 'package:appointment_app/model/client_list_model.dart';
 import 'package:appointment_app/services/client_list_service.dart';
 import 'package:appointment_app/utils/http_client.dart';
@@ -17,7 +18,7 @@ class CreateUserPage extends StatefulWidget {
   _CreateUserPageState createState() => _CreateUserPageState(type: type);
 }
 
-class _CreateUserPageState extends State<CreateUserPage> {
+class _CreateUserPageState extends State<CreateUserPage> with AfterLayoutMixin {
   _CreateUserPageState({@required this.type}) {
     print(this.type);
   }
@@ -34,6 +35,14 @@ class _CreateUserPageState extends State<CreateUserPage> {
   final _emailController = TextEditingController();
 
   var isLoading = false;
+
+  Future<Clients> _doctorListFuture;
+
+  void loadDoctors() {
+    setState(() {
+      this._doctorListFuture = getDoctors(HttpClient.of(context));
+    });
+  }
 
   void handleSave(BuildContext context) async {
     if (!_form.currentState.validate()) {
@@ -203,7 +212,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
             type != 'client'
                 ? Container()
                 : FutureBuilder(
-                    future: getDoctors(HttpClient.of(context)),
+                    future: _doctorListFuture,
                     builder: (BuildContext context,
                         AsyncSnapshot<Clients> snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
@@ -249,5 +258,10 @@ class _CreateUserPageState extends State<CreateUserPage> {
         child: Icon(Icons.navigate_next),
       ),
     );
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    loadDoctors();
   }
 }

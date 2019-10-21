@@ -138,6 +138,7 @@ class _PendingClientsListState extends State<PendingClientsList>
                                   "accept": true,
                                   "doctor": clientUid,
                                 }).then((res) {
+                              Navigator.of(context).pop();
                               Scaffold.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text("Request rejected"),
@@ -170,6 +171,7 @@ class _PendingClientsListState extends State<PendingClientsList>
                                   ),
                                 )
                                 .then((res) {
+                              Navigator.of(context).pop();
                               Scaffold.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text("Request accept"),
