@@ -6,6 +6,7 @@ import 'package:appointment_app/pages/dashboard.dart';
 import 'package:appointment_app/pages/doctor_list.dart';
 import 'package:appointment_app/pages/my_account.dart';
 import 'package:appointment_app/pages/notification.dart';
+import 'package:appointment_app/utils/http_client.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,8 @@ class DrawerInternal extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Widget build(BuildContext context) {
+    final httpClient = HttpClient.of(context);
+
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -41,30 +44,34 @@ class DrawerInternal extends StatelessWidget {
             },
             leading: Icon(Icons.notifications),
           ),
-          ListTile(
-            title: Text('Patients'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ClientList(),
+          httpClient.currentRole == "client"
+              ? Container()
+              : ListTile(
+                  title: Text('Patients'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ClientList(),
+                      ),
+                    );
+                  },
+                  leading: Icon(Icons.group),
                 ),
-              );
-            },
-            leading: Icon(Icons.group),
-          ),
-          ListTile(
-            title: Text('Doctor'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DoctorList(),
-                ),
-              );
-            },
-            leading: Icon(Icons.local_hospital),
-          ),
+          httpClient.currentRole == "admin"
+              ? ListTile(
+                  title: Text('Doctor'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DoctorList(),
+                      ),
+                    );
+                  },
+                  leading: Icon(Icons.local_hospital),
+                )
+              : Container(),
           ListTile(
             title: Text('My account'),
             onTap: () {

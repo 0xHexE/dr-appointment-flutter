@@ -7,6 +7,7 @@ import 'package:appointment_app/pages/client_list.dart';
 import 'package:appointment_app/pages/new_appointment.dart';
 import 'package:appointment_app/pages/new_calender.dart';
 import 'package:appointment_app/services/dashboard_service.dart';
+import 'package:appointment_app/utils/http_client.dart';
 import 'package:flutter/material.dart';
 
 import '../components/drawer.dart';
@@ -21,6 +22,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final currentData = DateTime.now();
+    final httpClient = HttpClient.of(context);
 
     return Scaffold(
       body: Container(
@@ -84,11 +86,15 @@ class _DashboardState extends State<Dashboard> {
                       currentData.day,
                     ).millisecondsSinceEpoch,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text("Pending"),
-                  ),
-                  PendingClientsList(),
+                  httpClient.currentRole == "admin"
+                      ? Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text("Pending"),
+                        )
+                      : Container(),
+                  httpClient.currentRole == "admin"
+                      ? PendingClientsList()
+                      : Container(),
                 ],
               );
             } else {

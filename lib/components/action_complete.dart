@@ -21,20 +21,30 @@ class _ActionCompleteState extends State<ActionComplete> {
   @override
   Widget build(BuildContext context) {
     Widget action;
+    HttpClient httpClient;
 
     switch (this.widget.model.activityId) {
       case "Task_1gqwpwv":
-        action = ActionCompleteClientConfirm(
-          processId: widget.model.processInstanceId,
-        );
+        if (httpClient.currentRole == "doctor") {
+          action = ActionCompleteClientConfirm(
+            processId: widget.model.processInstanceId,
+          );
+        } else {
+          action = Text("Waiting from petient");
+        }
+
         break;
       case "IntermediateThrowEvent_08koyuz":
         action = Text("Waiting for the appoinment day");
         break;
       case "Task_0xuytw0":
-        action = ActionDoctorComplete(
-          processId: widget.model.processInstanceId,
-        );
+        if (httpClient.currentRole == "doctor") {
+          action = ActionDoctorComplete(
+            processId: widget.model.processInstanceId,
+          );
+        } else {
+          action = Text("Waiting for feedback from doctor");
+        }
     }
 
     return Container(
