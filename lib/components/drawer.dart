@@ -27,7 +27,7 @@ class DrawerInternal extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Dashboard(),
+                  builder: (context) => Dashboard(userStatus: userStatus,),
                 ),
               );
             },
