@@ -104,14 +104,17 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => NewAppointment()),
-          );
-        },
+      floatingActionButton: Visibility(
+        child: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NewAppointment()),
+            );
+          },
+        ),
+        visible: widget.userStatus.role == "doctor" ? true : false,
       ),
       drawer: DrawerInternal(userStatus: widget.userStatus,),
       bottomNavigationBar: BottomAppBar(
