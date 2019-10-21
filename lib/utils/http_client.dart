@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 
-final String apiEndpoint = "http://10.0.2.2:3000/data/api/v1";
+final String apiEndpoint = "https://kle.clients.f4erp.com/data/api/v1";
 
 class HttpClient extends InheritedWidget {
   HttpClient({Key key, Widget child, this.firebaseAuth})
@@ -20,6 +20,11 @@ class HttpClient extends InheritedWidget {
   Client client;
   FirebaseAuth firebaseAuth;
   String currentToken;
+  String currentRole;
+
+  void setCurrentRole(String currentRole) {
+    this.currentToken = currentRole;
+  }
 
   String getCurrentToken() {
     return this.currentToken;

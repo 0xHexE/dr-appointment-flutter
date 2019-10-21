@@ -50,6 +50,7 @@ class _RootState extends State<Root> {
               widget = WaitingForConfirm();
               break;
             case "approved":
+              httpClient.setCurrentRole(userStatus.data.role);
               widget = Dashboard();
               break;
           }
