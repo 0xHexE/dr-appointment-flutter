@@ -25,26 +25,17 @@ class _ActionCompleteState extends State<ActionComplete> {
 
     switch (this.widget.model.activityId) {
       case "Task_1gqwpwv":
-        if (httpClient.currentRole == "doctor") {
-          action = ActionCompleteClientConfirm(
-            processId: widget.model.processInstanceId,
-          );
-        } else {
-          action = Text("Waiting from petient");
-        }
-
+        action = ActionCompleteClientConfirm(
+          processId: widget.model.processInstanceId,
+        );
         break;
       case "IntermediateThrowEvent_08koyuz":
         action = Text("Waiting for the appoinment day");
         break;
       case "Task_0xuytw0":
-        if (httpClient.currentRole == "doctor") {
-          action = ActionDoctorComplete(
-            processId: widget.model.processInstanceId,
-          );
-        } else {
-          action = Text("Waiting for feedback from doctor");
-        }
+        action = ActionDoctorComplete(
+          processId: widget.model.processInstanceId,
+        );
     }
 
     return Container(

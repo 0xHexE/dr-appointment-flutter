@@ -114,6 +114,7 @@ class _PendingClientsListState extends State<PendingClientsList>
                             value: clientUid,
                             onChanged: (data) {
                               setState(() {
+                                print(data);
                                 clientUid = data;
                               });
                             },
@@ -163,7 +164,7 @@ class _PendingClientsListState extends State<PendingClientsList>
                                   body: jsonEncode(
                                     {
                                       "id": id,
-                                      "accept": false,
+                                      "accept": true,
                                       "doctor": clientUid,
                                     },
                                   ),
@@ -171,7 +172,7 @@ class _PendingClientsListState extends State<PendingClientsList>
                                 .then((res) {
                               Scaffold.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text("Request rejected"),
+                                  content: Text("Request accept"),
                                 ),
                               );
                               _reloadData();

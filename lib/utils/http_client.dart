@@ -23,7 +23,6 @@ class HttpClient extends InheritedWidget {
   String currentRole;
 
   void setCurrentRole(String currentRole) {
-    print(currentRole);
     this.currentToken = currentRole;
   }
 
@@ -90,7 +89,6 @@ class LoginInterceptor implements InterceptorContract {
   @override
   Future<ResponseData> interceptResponse({ResponseData data}) async {
     if (data.statusCode < 200 || data.statusCode > 299) {
-      print(data.body);
       throw data;
     }
     return data;

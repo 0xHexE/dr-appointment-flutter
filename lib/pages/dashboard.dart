@@ -86,15 +86,11 @@ class _DashboardState extends State<Dashboard> {
                       currentData.day,
                     ).millisecondsSinceEpoch,
                   ),
-                  httpClient.currentRole == "admin"
-                      ? Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text("Pending"),
-                        )
-                      : Container(),
-                  httpClient.currentRole == "admin"
-                      ? PendingClientsList()
-                      : Container(),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text("Pending"),
+                  ),
+                  PendingClientsList(),
                 ],
               );
             } else {
