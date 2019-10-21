@@ -12,6 +12,10 @@ import 'package:flutter/material.dart';
 class DrawerInternal extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  final userStatus;
+
+  DrawerInternal({this.userStatus});
+
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
@@ -41,6 +45,7 @@ class DrawerInternal extends StatelessWidget {
             },
             leading: Icon(Icons.notifications),
           ),
+          userStatus.role == "doctor" ?
           ListTile(
             title: Text('Patients'),
             onTap: () {
@@ -52,7 +57,8 @@ class DrawerInternal extends StatelessWidget {
               );
             },
             leading: Icon(Icons.group),
-          ),
+          ) : SizedBox.shrink(),
+          userStatus.role == "doctor" ?
           ListTile(
             title: Text('Doctor'),
             onTap: () {
@@ -64,7 +70,7 @@ class DrawerInternal extends StatelessWidget {
               );
             },
             leading: Icon(Icons.local_hospital),
-          ),
+          ) : SizedBox.shrink(),
           ListTile(
             title: Text('My account'),
             onTap: () {
