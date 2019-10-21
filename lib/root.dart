@@ -32,7 +32,9 @@ class _RootState extends State<Root> {
       if (res == null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Login()),
+          MaterialPageRoute(
+            builder: (context) => Login(),
+          ),
         );
       } else {
         HttpClient httpClient = HttpClient.of(context);

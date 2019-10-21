@@ -83,7 +83,7 @@ class DatumDatum {
 }
 
 class NextAppointment {
-  List<NextAppointmentDatum> data;
+  List<Datum> data;
 
   NextAppointment({
     this.data,
@@ -97,8 +97,7 @@ class NextAppointment {
   factory NextAppointment.fromMap(Map<String, dynamic> json) => NextAppointment(
         data: json["data"] == null
             ? null
-            : List<NextAppointmentDatum>.from(
-                json["data"].map((x) => NextAppointmentDatum.fromMap(x))),
+            : List<Datum>.from(json["data"].map((x) => Datum.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -108,40 +107,108 @@ class NextAppointment {
       };
 }
 
-class NextAppointmentDatum {
-  String personName;
-  String personId;
-  DateTime time;
+class Datum {
+  int id;
+  ClientEntity clientEntity;
+  ClientEntity doctor;
+  String date;
   String issue;
   String description;
+  int time;
+  dynamic status;
+  String processId;
 
-  NextAppointmentDatum({
-    this.personName,
-    this.personId,
-    this.time,
+  Datum({
+    this.id,
+    this.clientEntity,
+    this.doctor,
+    this.date,
     this.issue,
     this.description,
+    this.time,
+    this.status,
+    this.processId,
   });
 
-  factory NextAppointmentDatum.fromJson(String str) =>
-      NextAppointmentDatum.fromMap(json.decode(str));
+  factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory NextAppointmentDatum.fromMap(Map<String, dynamic> json) =>
-      NextAppointmentDatum(
-        personName: json["personName"] == null ? null : json["personName"],
-        personId: json["personId"] == null ? null : json["personId"],
-        time: json["time"] == null ? null : DateTime.parse(json["time"]),
+  factory Datum.fromMap(Map<String, dynamic> json) => Datum(
+        id: json["id"] == null ? null : json["id"],
+        clientEntity: json["clientEntity"] == null
+            ? null
+            : ClientEntity.fromMap(json["clientEntity"]),
+        doctor: json["doctor"] == null
+            ? null
+            : ClientEntity.fromMap(json["doctor"]),
+        date: json["date"] == null ? null : json["date"],
         issue: json["issue"] == null ? null : json["issue"],
         description: json["description"] == null ? null : json["description"],
+        time: json["time"] == null ? null : json["time"],
+        status: json["status"],
+        processId: json["processId"],
       );
 
   Map<String, dynamic> toMap() => {
-        "personName": personName == null ? null : personName,
-        "personId": personId == null ? null : personId,
-        "time": time == null ? null : time.toIso8601String(),
+        "id": id == null ? null : id,
+        "clientEntity": clientEntity == null ? null : clientEntity.toMap(),
+        "doctor": doctor == null ? null : doctor.toMap(),
+        "date": date == null ? null : date,
         "issue": issue == null ? null : issue,
         "description": description == null ? null : description,
+        "time": time == null ? null : time,
+        "status": status,
+        "processId": processId,
+      };
+}
+
+class ClientEntity {
+  String uid;
+  dynamic photoUrl;
+  String email;
+  String userRole;
+  String name;
+  String mobileNumber;
+  String address;
+  String dateOfBirth;
+
+  ClientEntity({
+    this.uid,
+    this.photoUrl,
+    this.email,
+    this.userRole,
+    this.name,
+    this.mobileNumber,
+    this.address,
+    this.dateOfBirth,
+  });
+
+  factory ClientEntity.fromJson(String str) =>
+      ClientEntity.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory ClientEntity.fromMap(Map<String, dynamic> json) => ClientEntity(
+        uid: json["uid"] == null ? null : json["uid"],
+        photoUrl: json["photoUrl"],
+        email: json["email"] == null ? null : json["email"],
+        userRole: json["userRole"] == null ? null : json["userRole"],
+        name: json["name"] == null ? null : json["name"],
+        mobileNumber:
+            json["mobileNumber"] == null ? null : json["mobileNumber"],
+        address: json["address"] == null ? null : json["address"],
+        dateOfBirth: json["dateOfBirth"] == null ? null : json["dateOfBirth"],
+      );
+
+  Map<String, dynamic> toMap() => {
+        "uid": uid == null ? null : uid,
+        "photoUrl": photoUrl,
+        "email": email == null ? null : email,
+        "userRole": userRole == null ? null : userRole,
+        "name": name == null ? null : name,
+        "mobileNumber": mobileNumber == null ? null : mobileNumber,
+        "address": address == null ? null : address,
+        "dateOfBirth": dateOfBirth == null ? null : dateOfBirth,
       };
 }

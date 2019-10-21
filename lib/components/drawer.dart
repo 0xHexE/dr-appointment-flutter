@@ -32,8 +32,12 @@ class DrawerInternal extends StatelessWidget {
           ListTile(
             title: Text('Notifications'),
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationPage(),
+                ),
+              );
             },
             leading: Icon(Icons.notifications),
           ),
@@ -42,7 +46,9 @@ class DrawerInternal extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ClientList()),
+                MaterialPageRoute(
+                  builder: (context) => ClientList(),
+                ),
               );
             },
             leading: Icon(Icons.group),
@@ -75,7 +81,9 @@ class DrawerInternal extends StatelessWidget {
               _firebaseAuth.signOut().then((res) {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => Login()),
+                  MaterialPageRoute(
+                    builder: (context) => Login(),
+                  ),
                 );
               });
             },

@@ -219,7 +219,6 @@ class _PendingClientsListState extends State<PendingClientsList>
             return ListView.builder(
               itemCount: snapshot.data.data.length,
               itemBuilder: (context, position) {
-                print(snapshot.data.data[position].id);
                 return ListTile(
                   onTap: () {
                     _showBottomSheet(snapshot.data.data[position].value,

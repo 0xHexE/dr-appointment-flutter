@@ -20,6 +20,8 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
+    final currentData = DateTime.now();
+
     return Scaffold(
       body: Container(
         child: FutureBuilder<DashboardData>(
@@ -68,7 +70,20 @@ class _DashboardState extends State<Dashboard> {
                     padding: const EdgeInsets.all(16.0),
                     child: Text("Today's appointment"),
                   ),
-                  ThisDayAppointment(),
+                  AppointmentsViewer(
+                    toDate: DateTime(
+                      currentData.year,
+                      currentData.month,
+                      currentData.day,
+                      23,
+                      59,
+                    ).millisecondsSinceEpoch,
+                    fromDate: DateTime(
+                      currentData.year,
+                      currentData.month,
+                      currentData.day,
+                    ).millisecondsSinceEpoch,
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text("Pending"),

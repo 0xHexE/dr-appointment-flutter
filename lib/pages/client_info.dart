@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'appointment_info.dart';
-
 class ClientInfo extends StatefulWidget {
   final String clientId;
 
@@ -53,11 +51,11 @@ class _ClientInfoState extends State<ClientInfo> {
           ),
           ListTile(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => AppointmentInfo(),
-                ),
-              );
+//              Navigator.of(context).push(
+//                MaterialPageRoute(
+//                  builder: (context) => AppointmentInfo(),
+//                ),
+//              );
             },
             leading: Icon(Icons.calendar_today),
             title: Text("13-Dec-2018"),

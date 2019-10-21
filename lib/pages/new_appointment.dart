@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:appointment_app/model/client_list_model.dart';
+import 'package:appointment_app/pages/appointment_info.dart';
 import 'package:appointment_app/services/client_list_service.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -14,7 +15,7 @@ class NewAppointment extends StatefulWidget {
 }
 
 class _NewAppointmentState extends State<NewAppointment> {
-  final dateFormat = DateFormat("yyyy-MM-dd");
+  final dateFormat = DateFormat("dd-MM-yyyy");
   final timeFormat = DateFormat("HH:mm");
 
   final _issueController = TextEditingController();
@@ -29,20 +30,24 @@ class _NewAppointmentState extends State<NewAppointment> {
   void dispose() {
     _issueController.dispose();
     _descriptionController.dispose();
-    _timeController.dispose();
     _dateController.dispose();
     _timeController.dispose();
     _timeInMinutesController.dispose();
     super.dispose();
   }
 
+  Future<Clients> data;
+  final _key = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
-    final _key = GlobalKey<ScaffoldState>();
+    if (data == null) {
+      data = getClients(HttpClient.of(context));
+    }
 
     return Scaffold(
+      key: _key,
       appBar: AppBar(
-        key: _key,
         title: Text(
           'New Appointment',
           style: TextStyle(color: Colors.black),
@@ -61,7 +66,7 @@ class _NewAppointmentState extends State<NewAppointment> {
           padding: EdgeInsets.all(10),
           children: <Widget>[
             FutureBuilder(
-              future: getClients(HttpClient.of(context)),
+              future: data,
               builder: (BuildContext context, AsyncSnapshot<Clients> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
@@ -95,14 +100,14 @@ class _NewAppointmentState extends State<NewAppointment> {
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
-                labelText: 'Issue',
+                labelText: 'Agenda',
               ),
               controller: _issueController,
             ),
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
-                labelText: 'Description',
+                labelText: 'Details',
               ),
               minLines: 3,
               maxLines: 3,
@@ -153,27 +158,69 @@ class _NewAppointmentState extends State<NewAppointment> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          final currentSnack = _key.currentState.showSnackBar(
+            SnackBar(
+              content: Text("Creating appointment"),
+            ),
+          );
+
+          final dateControllerSplitted =
+              _dateController.text.split("-").map((res) {
+            return int.parse(res);
+          }).toList();
+
+          final timeControllerSplitted =
+              _timeController.text.split(":").map((res) {
+            return int.parse(res);
+          }).toList();
+
+          final dateForAppointment = DateTime(
+            dateControllerSplitted[2],
+            dateControllerSplitted[1],
+            dateControllerSplitted[0],
+            timeControllerSplitted[0],
+            timeControllerSplitted[1],
+          );
+
           final httpClient = HttpClient.of(context);
           httpClient.client
-              .post("/appointment",
-                  body: jsonEncode({
-                    "date": DateTime.now().millisecondsSinceEpoch,
-                    "description": _descriptionController.text,
-                    "issue": _issueController.text,
-                    "client": clientUid,
-                    "time": 60
-                  }))
+              .post(
+            "/appointment",
+            body: jsonEncode(
+              {
+                "date": dateForAppointment.millisecondsSinceEpoch,
+                "description": _descriptionController.text,
+                "issue": _issueController.text,
+                "client": clientUid,
+                "time": int.parse(_timeInMinutesController.text),
+              },
+            ),
+          )
               .then((res) {
+            try {
+              currentSnack.close();
+            } catch (e) {}
+            final returnObject = jsonDecode(res.body);
+
             _key.currentState.showSnackBar(SnackBar(
               content: Text(
                   "Success check you notification for further instructions"),
             ));
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => AppointmentInfo(
+                  appointmentId: returnObject["data"]["id"],
+                ),
+              ),
+            );
           }).catchError((res) {
+            try {
+              currentSnack.close();
+            } catch (e) {}
             _key.currentState.showSnackBar(SnackBar(
               content: Text("Error " + res.toString()),
             ));
           });
-//          final res = addNewAppointment('test', 'testDate', 'testTime');
         },
         isExtended: true,
         child: Icon(Icons.save),
