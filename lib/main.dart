@@ -1,7 +1,9 @@
+import 'package:appointment_app/redux/state.dart';
 import 'package:appointment_app/root.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:redurx/redurx.dart';
 
 import 'app_config.dart';
 
@@ -20,10 +22,12 @@ class _MainAppState extends State<MainApp> {
   // Initialize app settings from the default configuration.
   bool _showPerformanceOverlay = defaultConfig.showPerformanceOverlay;
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final store = Store<AppState>(AppState(''));
 
   @override
   Widget build(BuildContext context) {
     return HttpClient(
+      appState: store,
       firebaseAuth: _firebaseAuth,
       child: MaterialApp(
         title: defaultConfig.appName,

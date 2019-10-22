@@ -1,15 +1,21 @@
 import 'dart:async';
 
+import 'package:appointment_app/redux/state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http_interceptor/http_interceptor.dart';
+import 'package:redurx/redurx.dart';
 
-final String apiEndpoint = "https://kle.clients.f4erp.com/data/api/v1";
+final String apiEndpoint = "http://10.0.2.2:3000/data/api/v1";
 
 class HttpClient extends InheritedWidget {
-  HttpClient({Key key, Widget child, this.firebaseAuth})
-      : super(key: key, child: child) {
+  HttpClient({
+    Key key,
+    Widget child,
+    @required this.appState,
+    this.firebaseAuth,
+  }) : super(key: key, child: child) {
     client = HttpClientWithInterceptor.build(
       interceptors: [
         LoginInterceptor(firebaseAuth: firebaseAuth),
@@ -17,17 +23,19 @@ class HttpClient extends InheritedWidget {
     );
   }
 
+  final Store<AppState> appState;
+
   Client client;
   FirebaseAuth firebaseAuth;
   String currentToken;
   String currentRole;
 
   void setCurrentRole(String currentRole) {
-    this.currentRole = currentRole;
+    appState.dispatch(SetRole(currentRole));
   }
 
   String getCurrentToken() {
-    return this.currentToken;
+    return appState.state.role;
   }
 
   @override
