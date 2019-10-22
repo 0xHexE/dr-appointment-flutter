@@ -28,13 +28,12 @@ class HttpClient extends InheritedWidget {
   Client client;
   FirebaseAuth firebaseAuth;
   String currentToken;
-  String currentRole;
 
   void setCurrentRole(String currentRole) {
     appState.dispatch(SetRole(currentRole));
   }
 
-  String getCurrentToken() {
+  String get currentRole {
     return appState.state.role;
   }
 

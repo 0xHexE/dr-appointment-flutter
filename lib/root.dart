@@ -51,7 +51,6 @@ class _RootState extends State<Root> {
               break;
             case "approved":
               httpClient.setCurrentRole(userStatus.data.role);
-              print(userStatus.data.role);
               widget = Dashboard();
               break;
           }
