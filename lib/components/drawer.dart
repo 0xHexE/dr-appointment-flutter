@@ -1,12 +1,13 @@
 import 'dart:async';
 
-import 'package:appointment_app/utils/http_client.dart';
 import 'package:appointment_app/auth/login.dart';
 import 'package:appointment_app/pages/client_list.dart';
 import 'package:appointment_app/pages/dashboard.dart';
 import 'package:appointment_app/pages/doctor_list.dart';
 import 'package:appointment_app/pages/my_account.dart';
+import 'package:appointment_app/pages/new_department.dart';
 import 'package:appointment_app/pages/notification.dart';
+import 'package:appointment_app/utils/http_client.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -44,32 +45,48 @@ class DrawerInternal extends StatelessWidget {
             },
             leading: Icon(Icons.notifications),
           ),
-          httpClient.currentRole == "doctor" ?
-          ListTile(
-            title: Text('Patients'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ClientList(),
-                ),
-              );
-            },
-            leading: Icon(Icons.group),
-          ) : SizedBox.shrink(),
-          httpClient.currentRole == "doctor" ?
-          ListTile(
-            title: Text('Doctor'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DoctorList(),
-                ),
-              );
-            },
-            leading: Icon(Icons.local_hospital),
-          ) : SizedBox.shrink(),
+          (httpClient.currentRole == "doctor" ||
+                  httpClient.currentRole == "admin")
+              ? ListTile(
+                  title: Text('Patients'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ClientList(),
+                      ),
+                    );
+                  },
+                  leading: Icon(Icons.group),
+                )
+              : SizedBox.shrink(),
+          httpClient.currentRole == "admin"
+              ? ListTile(
+                  title: Text('Doctor'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DoctorList(),
+                      ),
+                    );
+                  },
+                  leading: Icon(Icons.local_hospital),
+                )
+              : SizedBox.shrink(),
+          httpClient.currentRole == "admin"
+              ? ListTile(
+                  title: Text("Departments"),
+                  leading: Icon(Icons.group),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => NewDepartment(),
+                      ),
+                    );
+                  },
+                )
+              : Container(),
           ListTile(
             title: Text('My account'),
             onTap: () {

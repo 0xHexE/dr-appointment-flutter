@@ -1,6 +1,7 @@
 import 'package:after_layout/after_layout.dart';
 import 'package:appointment_app/model/user_info_model.dart';
 import 'package:appointment_app/pages/appointment_info.dart';
+import 'package:appointment_app/pages/new_appointment.dart';
 import 'package:appointment_app/services/errro_handler.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:flutter/material.dart';
@@ -115,9 +116,15 @@ class _ClientInfoState extends State<ClientInfo>
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        label: Text("Edit"),
-        icon: Icon(Icons.edit),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => NewAppointment(),
+            ),
+          );
+        },
+        label: Text("New appointment"),
+        icon: Icon(Icons.calendar_today),
       ),
     );
   }
