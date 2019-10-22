@@ -21,21 +21,40 @@ class _ActionCompleteState extends State<ActionComplete> {
   @override
   Widget build(BuildContext context) {
     Widget action;
-    HttpClient httpClient;
+    HttpClient httpClient = HttpClient.of(context);
 
     switch (this.widget.model.activityId) {
       case "Task_1gqwpwv":
-        action = ActionCompleteClientConfirm(
-          processId: widget.model.processInstanceId,
-        );
+      case "Task_1yb7bos":
+        if (httpClient.currentRole == "client") {
+          action = ConfirmUserConfirmDialog(
+            processId: widget.model.processInstanceId,
+          );
+        } else {
+          action = Text("Waiting for patient");
+        }
+        break;
+      case "Task_0knnp4t":
+      case "Task_18vt8hj":
+        if (httpClient.currentRole == "doctor") {
+          action = ConfirmUserConfirmDialog(
+            processId: widget.model.processInstanceId,
+          );
+        } else {
+          action = Text("Waiting for doctor");
+        }
         break;
       case "IntermediateThrowEvent_08koyuz":
         action = Text("Waiting for the appoinment day");
         break;
       case "Task_0xuytw0":
-        action = ActionDoctorComplete(
-          processId: widget.model.processInstanceId,
-        );
+        if (httpClient.currentRole == "doctro") {
+          action = ActionDoctorComplete(
+            processId: widget.model.processInstanceId,
+          );
+        } else {
+          action = Text("Waiting for doctor feedback");
+        }
     }
 
     return Container(
@@ -115,19 +134,18 @@ class _ActionDoctorCompleteState extends State<ActionDoctorComplete> {
   }
 }
 
-class ActionCompleteClientConfirm extends StatefulWidget {
+class ConfirmUserConfirmDialog extends StatefulWidget {
   final String processId;
 
-  ActionCompleteClientConfirm({this.processId});
+  ConfirmUserConfirmDialog({this.processId});
 
   @override
-  _ActionCompleteClientConfirmState createState() =>
-      _ActionCompleteClientConfirmState();
+  _ConfirmUserConfirmDialogState createState() =>
+      _ConfirmUserConfirmDialogState();
 }
 
-class _ActionCompleteClientConfirmState
-    extends State<ActionCompleteClientConfirm>
-    with AfterLayoutMixin<ActionCompleteClientConfirm> {
+class _ConfirmUserConfirmDialogState extends State<ConfirmUserConfirmDialog>
+    with AfterLayoutMixin<ConfirmUserConfirmDialog> {
   bool available = false;
   final dateFormat = DateFormat("dd-MM-yyyy");
   final timeFormat = DateFormat("HH:mm");
@@ -144,6 +162,8 @@ class _ActionCompleteClientConfirmState
     super.dispose();
   }
 
+  DateTime selectedDate;
+
   @override
   void afterFirstLayout(BuildContext context) async {
     setState(() {
@@ -155,18 +175,47 @@ class _ActionCompleteClientConfirmState
     final response = await HttpClient.of(context)
         .client
         .get("/appointment/task/variables/" + this.widget.processId);
-    return ClientApprove.fromJson(response.body);
+    final returnData = ClientApprove.fromJson(response.body);
+    selectedDate = DateTime.parse(returnData.data.date);
+    print(selectedDate);
+    return returnData;
   }
 
   Future approve() async {
-    final body = json.encode({"isClientAvailable": true});
+    DateTime dateForAppointment;
+
+    if (!available) {
+      final dateControllerSplitted = _dateController.text.split("-").map((res) {
+        return int.parse(res);
+      }).toList();
+
+      final timeControllerSplitted = _timeController.text.split(":").map((res) {
+        return int.parse(res);
+      }).toList();
+
+      dateForAppointment = DateTime(
+        dateControllerSplitted[2],
+        dateControllerSplitted[1],
+        dateControllerSplitted[0],
+        timeControllerSplitted[0],
+        timeControllerSplitted[1],
+      );
+    }
+
+    final body = json.encode({
+      "isOk": available,
+      "note": _textController.text,
+      "date": dateForAppointment != null
+          ? dateForAppointment.millisecondsSinceEpoch
+          : selectedDate.millisecondsSinceEpoch,
+    });
 
     await HttpClient.of(context)
         .client
         .post(
-            "/appointment/task/complete/client-approve/" +
-                this.widget.processId,
-            body: body)
+          "/appointment/task/complete/availability/" + this.widget.processId,
+          body: body,
+        )
         .then((res) {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text("Successfully submitted"),
@@ -230,7 +279,11 @@ class _ActionCompleteClientConfirmState
                           onShowPicker: (context, currentValue) {
                             return showDatePicker(
                               context: context,
-                              firstDate: DateTime(1900),
+                              firstDate: DateTime(
+                                DateTime.now().year,
+                                DateTime.now().month,
+                                DateTime.now().day,
+                              ),
                               initialDate: currentValue ?? DateTime.now(),
                               lastDate: DateTime(2100),
                             );

@@ -111,7 +111,10 @@ class _DashboardState extends State<Dashboard> {
           },
         ),
         // visible: widget.userStatus.role == "doctor" ? true : false,
-        visible: httpClient.currentRole == "doctor" ? true : false,
+        visible: httpClient.currentRole == "doctor" ||
+                httpClient.currentRole == "client"
+            ? true
+            : false,
       ),
       drawer: DrawerInternal(),
       bottomNavigationBar: BottomAppBar(
@@ -129,16 +132,17 @@ class _DashboardState extends State<Dashboard> {
                 );
               },
             ),
-            httpClient.currentRole == 'doctor' ?
-            IconButton(
-              icon: Icon(Icons.person),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ClientList()),
-                );
-              },
-            ) : SizedBox.shrink(),
+            httpClient.currentRole == 'doctor'
+                ? IconButton(
+                    icon: Icon(Icons.person),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ClientList()),
+                      );
+                    },
+                  )
+                : SizedBox.shrink(),
           ],
         ),
       ),

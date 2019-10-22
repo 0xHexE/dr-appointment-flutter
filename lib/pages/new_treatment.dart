@@ -4,12 +4,12 @@ import 'package:appointment_app/utils/http_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class NewDepartment extends StatefulWidget {
+class NewTreatmentType extends StatefulWidget {
   @override
-  _NewDepartmentState createState() => _NewDepartmentState();
+  _NewTreatmentTypeState createState() => _NewTreatmentTypeState();
 }
 
-class _NewDepartmentState extends State<NewDepartment> {
+class _NewTreatmentTypeState extends State<NewTreatmentType> {
   var isLoading = false;
 
   final _nameController = TextEditingController();
@@ -26,7 +26,7 @@ class _NewDepartmentState extends State<NewDepartment> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Your departments'),
+        title: Text('Your treatment'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -44,7 +44,7 @@ class _NewDepartmentState extends State<NewDepartment> {
               style: Theme.of(context).textTheme.title,
             ),
             Text(
-              "to add New Department",
+              "to add new treatment type",
               textAlign: TextAlign.center,
             ),
             Padding(
@@ -74,7 +74,7 @@ class _NewDepartmentState extends State<NewDepartment> {
         onPressed: () {
           HttpClient.of(context)
               .client
-              .post("/department",
+              .post("/treatment-type",
                   body: jsonEncode({
                     "name": _nameController.text,
                   }))

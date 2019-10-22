@@ -43,9 +43,11 @@ class _AppointmentInfoState extends State<AppointmentInfo>
 
           switch (snapshot.data.childActivityInstances.first.activityId) {
             case "Task_1gqwpwv":
+            case "Task_1yb7bos":
               currentStatus = "Waiting for client";
               break;
             case "Task_0knnp4t":
+            case "Task_18vt8hj":
               currentStatus = "Waiting for doctor";
               break;
             case "Task_0xuytw0":

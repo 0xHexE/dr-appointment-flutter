@@ -71,7 +71,7 @@ class _DoctorListState extends State<DoctorList> {
                         child: Icon(Icons.date_range),
                         padding: EdgeInsets.all(20),
                       ),
-                      Text(snapshot.data.data[i].dateOfBirth,
+                      Text(snapshot.data.data[i].dateOfBirth ?? 'Not available',
                           textAlign: TextAlign.center),
                       Divider()
                     ],

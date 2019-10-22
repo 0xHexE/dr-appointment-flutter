@@ -19,9 +19,7 @@ class CreateUserPage extends StatefulWidget {
 }
 
 class _CreateUserPageState extends State<CreateUserPage> with AfterLayoutMixin {
-  _CreateUserPageState({@required this.type}) {
-    print(this.type);
-  }
+  _CreateUserPageState({@required this.type}) {}
 
   final String type;
   final format = DateFormat("dd-MM-yyyy");
@@ -56,23 +54,24 @@ class _CreateUserPageState extends State<CreateUserPage> with AfterLayoutMixin {
       content: Text('Creating...'),
     ));
     isLoading = true;
-    final date = _dateOfBirthController.text;
 
-    final dateArray = date.split("-");
-
-    final dateOfBirth = DateTime.utc(int.parse(dateArray[2]),
-        int.parse(dateArray[1]), int.parse(dateArray[0]));
-
-    final form = {
+    Map<String, dynamic> form = {
       "name": _nameController.text,
       "address": _addressController.text,
-      "dateOfBirth": dateOfBirth.millisecondsSinceEpoch,
       "mobile": _mobileNumberController.text,
       "email": _emailController.text,
       "type": type
     };
 
-    if (clientUid == null) {
+    if (type == "client") {
+      final date = _dateOfBirthController.text;
+      final dateArray = date.split("-");
+      final dateOfBirth = DateTime.utc(int.parse(dateArray[2]),
+          int.parse(dateArray[1]), int.parse(dateArray[0]));
+      form["dateOfBirth"] = dateOfBirth.millisecondsSinceEpoch;
+    }
+
+    if (clientUid != null) {
       form["doctor"] = clientUid;
     }
 
@@ -184,31 +183,33 @@ class _CreateUserPageState extends State<CreateUserPage> with AfterLayoutMixin {
               minLines: 3,
               enabled: !isLoading,
             ),
-            DateTimeField(
-              controller: _dateOfBirthController,
-              decoration: InputDecoration(
-                filled: true,
-                labelText: 'Date of birth',
-                hintText: 'Date of birth',
-              ),
-              format: format,
-              validator: (res) {
-                if (res == null || res.isAfter(DateTime.now())) {
-                  return "Enter valid date of bith";
-                } else {
-                  return null;
-                }
-              },
-              enabled: !isLoading,
-              onShowPicker: (context, currentValue) {
-                return showDatePicker(
-                  context: context,
-                  firstDate: DateTime(1900),
-                  initialDate: currentValue ?? DateTime.now(),
-                  lastDate: DateTime(2100),
-                );
-              },
-            ),
+            type == 'client'
+                ? DateTimeField(
+                    controller: _dateOfBirthController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: 'Date of birth',
+                      hintText: 'Date of birth',
+                    ),
+                    format: format,
+                    validator: (res) {
+                      if (res == null || res.isAfter(DateTime.now())) {
+                        return "Enter valid date of bith";
+                      } else {
+                        return null;
+                      }
+                    },
+                    enabled: !isLoading,
+                    onShowPicker: (context, currentValue) {
+                      return showDatePicker(
+                        context: context,
+                        firstDate: DateTime(1900),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime(2100),
+                      );
+                    },
+                  )
+                : Container(),
             type != 'client'
                 ? Container()
                 : FutureBuilder(

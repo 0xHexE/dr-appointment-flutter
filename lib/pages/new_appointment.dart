@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:appointment_app/model/client_list_model.dart';
+import 'package:appointment_app/model/department_model.dart' as departmentModel;
 import 'package:appointment_app/pages/appointment_info.dart';
 import 'package:appointment_app/services/client_list_service.dart';
+import 'package:appointment_app/services/department_service.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,12 +39,26 @@ class _NewAppointmentState extends State<NewAppointment> {
   }
 
   Future<Clients> data;
+  Future<departmentModel.Department> _departmentFuture;
+  // TODO: SHARE SAME MODEL CHANGE IT
+  Future<departmentModel.Department> _treatmentTypeFuture;
   final _key = GlobalKey<ScaffoldState>();
+  int department;
+  int treatmentType;
 
   @override
   Widget build(BuildContext context) {
-    if (data == null) {
-      data = getClients(HttpClient.of(context));
+    final httpClient = HttpClient.of(context);
+
+    if (data == null &&
+        (httpClient.currentRole == 'admin' ||
+            httpClient.currentRole == 'doctor')) {
+      data = getClients(httpClient);
+    }
+
+    if (_departmentFuture == null) {
+      _departmentFuture = getDepartments(httpClient);
+      _treatmentTypeFuture = getTreatmentTypes(httpClient);
     }
 
     return Scaffold(
@@ -65,38 +81,6 @@ class _NewAppointmentState extends State<NewAppointment> {
         child: ListView(
           padding: EdgeInsets.all(10),
           children: <Widget>[
-            FutureBuilder(
-              future: data,
-              builder: (BuildContext context, AsyncSnapshot<Clients> snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError) {
-                    return Text(snapshot.error.toString());
-                  }
-                  return DropdownButtonFormField<String>(
-                    decoration: InputDecoration(
-                      filled: true,
-                      labelText: 'Client',
-                    ),
-                    items: snapshot.data.data.map((Datum value) {
-                      return DropdownMenuItem<String>(
-                        value: value.uid,
-                        child: new Text(value.name),
-                      );
-                    }).toList(),
-                    value: clientUid,
-                    onChanged: (data) {
-                      setState(() {
-                        clientUid = data;
-                      });
-                    },
-                  );
-                } else {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-            ),
             TextFormField(
               decoration: InputDecoration(
                 filled: true,
@@ -112,6 +96,109 @@ class _NewAppointmentState extends State<NewAppointment> {
               minLines: 3,
               maxLines: 3,
               controller: _descriptionController,
+            ),
+            httpClient.currentRole == 'doctor'
+                ? FutureBuilder(
+                    future: data,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<Clients> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          return Text(snapshot.error.toString());
+                        }
+                        return DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                            filled: true,
+                            labelText: 'Client',
+                          ),
+                          items: snapshot.data.data.map((Datum value) {
+                            return DropdownMenuItem<String>(
+                              value: value.uid,
+                              child: new Text(value.name),
+                            );
+                          }).toList(),
+                          value: clientUid,
+                          onChanged: (data) {
+                            setState(() {
+                              clientUid = data;
+                            });
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  )
+                : Container(),
+            FutureBuilder(
+              future: _departmentFuture,
+              builder: (BuildContext context,
+                  AsyncSnapshot<departmentModel.Department> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Text(snapshot.error.toString());
+                  }
+                  return DropdownButtonFormField<int>(
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: 'Department',
+                    ),
+                    items:
+                        snapshot.data.data.map((departmentModel.Datum value) {
+                      return DropdownMenuItem<int>(
+                        value: value.id,
+                        child: Text(value.name),
+                      );
+                    }).toList(),
+                    value: department,
+                    onChanged: (data) {
+                      setState(() {
+                        department = data;
+                      });
+                    },
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            ),
+            FutureBuilder(
+              future: _treatmentTypeFuture,
+              builder: (BuildContext context,
+                  AsyncSnapshot<departmentModel.Department> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Text(snapshot.error.toString());
+                  }
+                  return DropdownButtonFormField<int>(
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: 'Treatment type',
+                    ),
+                    items:
+                        snapshot.data.data.map((departmentModel.Datum value) {
+                      return DropdownMenuItem<int>(
+                        value: value.id,
+                        child: Text(value.name),
+                      );
+                    }).toList(),
+                    value: treatmentType,
+                    onChanged: (data) {
+                      setState(() {
+                        treatmentType = data;
+                      });
+                    },
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
             DateTimeField(
               decoration: InputDecoration(filled: true, labelText: 'Pick Date'),
@@ -192,6 +279,8 @@ class _NewAppointmentState extends State<NewAppointment> {
                 "description": _descriptionController.text,
                 "issue": _issueController.text,
                 "client": clientUid,
+                "treatment": treatmentType,
+                "department": department,
                 "time": int.parse(_timeInMinutesController.text),
               },
             ),

@@ -6,6 +6,7 @@ import 'package:appointment_app/pages/dashboard.dart';
 import 'package:appointment_app/pages/doctor_list.dart';
 import 'package:appointment_app/pages/my_account.dart';
 import 'package:appointment_app/pages/new_department.dart';
+import 'package:appointment_app/pages/new_treatment.dart';
 import 'package:appointment_app/pages/notification.dart';
 import 'package:appointment_app/utils/http_client.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -82,6 +83,19 @@ class DrawerInternal extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => NewDepartment(),
+                      ),
+                    );
+                  },
+                )
+              : Container(),
+          httpClient.currentRole == "admin"
+              ? ListTile(
+                  title: Text("Treatment types"),
+                  leading: Icon(Icons.local_hospital),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => NewTreatmentType(),
                       ),
                     );
                   },
