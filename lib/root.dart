@@ -52,7 +52,7 @@ class _RootState extends State<Root> {
             case "approved":
               httpClient.setCurrentRole(userStatus.data.role);
               print(userStatus.data.role);
-              widget = Dashboard(userStatus: userStatus.data);
+              widget = Dashboard();
               break;
           }
           Navigator.pushReplacement(
@@ -134,7 +134,7 @@ class CheckIsFirstTimeLogin extends StatelessWidget {
             case "pending":
               return WaitingForConfirm();
             case "approved":
-              return Dashboard(userStatus: userStatus.data);
+              return Dashboard();
           }
           return null;
         } else {

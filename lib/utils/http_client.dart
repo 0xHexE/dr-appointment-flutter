@@ -23,7 +23,7 @@ class HttpClient extends InheritedWidget {
   String currentRole;
 
   void setCurrentRole(String currentRole) {
-    this.currentToken = currentRole;
+    this.currentRole = currentRole;
   }
 
   String getCurrentToken() {

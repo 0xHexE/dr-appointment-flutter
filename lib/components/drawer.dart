@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:appointment_app/utils/http_client.dart';
 import 'package:appointment_app/auth/login.dart';
 import 'package:appointment_app/pages/client_list.dart';
 import 'package:appointment_app/pages/dashboard.dart';
@@ -12,11 +13,9 @@ import 'package:flutter/material.dart';
 class DrawerInternal extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  final userStatus;
-
-  DrawerInternal({this.userStatus});
-
   Widget build(BuildContext context) {
+    final httpClient = HttpClient.of(context);
+
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -27,7 +26,7 @@ class DrawerInternal extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Dashboard(userStatus: userStatus,),
+                  builder: (context) => Dashboard(),
                 ),
               );
             },
@@ -45,7 +44,7 @@ class DrawerInternal extends StatelessWidget {
             },
             leading: Icon(Icons.notifications),
           ),
-          userStatus.role == "doctor" ?
+          httpClient.currentRole == "doctor" ?
           ListTile(
             title: Text('Patients'),
             onTap: () {
@@ -58,7 +57,7 @@ class DrawerInternal extends StatelessWidget {
             },
             leading: Icon(Icons.group),
           ) : SizedBox.shrink(),
-          userStatus.role == "doctor" ?
+          httpClient.currentRole == "doctor" ?
           ListTile(
             title: Text('Doctor'),
             onTap: () {

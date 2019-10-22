@@ -14,10 +14,6 @@ import '../components/drawer.dart';
 import '../components/menu_toggle_button.dart';
 
 class Dashboard extends StatefulWidget {
-  final userStatus;
-
-  Dashboard({this.userStatus});
-
   @override
   _DashboardState createState() => _DashboardState();
 }
@@ -114,9 +110,10 @@ class _DashboardState extends State<Dashboard> {
             );
           },
         ),
-        visible: widget.userStatus.role == "doctor" ? true : false,
+        // visible: widget.userStatus.role == "doctor" ? true : false,
+        visible: httpClient.currentRole == "doctor" ? true : false,
       ),
-      drawer: DrawerInternal(userStatus: widget.userStatus,),
+      drawer: DrawerInternal(),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
         notchMargin: 4.0,
@@ -132,7 +129,7 @@ class _DashboardState extends State<Dashboard> {
                 );
               },
             ),
-            widget.userStatus.role == 'doctor' ?
+            httpClient.currentRole == 'doctor' ?
             IconButton(
               icon: Icon(Icons.person),
               onPressed: () {
