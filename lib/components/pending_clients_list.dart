@@ -220,6 +220,7 @@ class _PendingClientsListState extends State<PendingClientsList>
             }
 
             return ListView.builder(
+              shrinkWrap: true,
               itemCount: snapshot.data.data.length,
               itemBuilder: (context, position) {
                 return ListTile(

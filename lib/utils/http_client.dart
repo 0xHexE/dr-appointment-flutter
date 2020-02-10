@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 import 'package:http_interceptor/http_interceptor.dart';
 import 'package:redurx/redurx.dart';
 
-final String apiEndpoint = "https://kle.clients.f4erp.com/data/api/v1";
+final String apiEndpoint = "http://10.0.2.2/data/api/v1";
 
 class HttpClient extends InheritedWidget {
   HttpClient({
